@@ -1,3 +1,5 @@
+import { ColorMaterial } from '@vertexvis/viewer';
+
 const Gray = '#6B7280';
 const Red = '#EF4444';
 const Amber = '#F59E0B';
@@ -17,6 +19,17 @@ export const DefaultColors = [
   Violet,
   Pink,
 ];
+
+export const SelectColor = {
+  ...ColorMaterial.create(255, 255, 0),
+  glossiness: 4,
+  specular: {
+    r: 255,
+    g: 255,
+    b: 255,
+    a: 0,
+  },
+};
 
 export function calcRedToGreenGradient(
   percent: number,

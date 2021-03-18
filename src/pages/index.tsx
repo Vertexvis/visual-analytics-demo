@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ColorMaterial, Environment } from '@vertexvis/viewer';
+import { Environment } from '@vertexvis/viewer';
 import { useDropzone } from 'react-dropzone';
 import { onTap, Viewer } from '../components/Viewer';
 import { Sidebar } from '../components/Sidebar';
@@ -11,20 +11,14 @@ import {
 import { handleCsvUpload } from '../lib/file-upload';
 import { useViewer } from '../lib/viewer';
 import { vertexvis } from '@vertexvis/frame-streaming-protos';
-import { applyBIData } from '../lib/scene-alterations';
+import {
+  applyBIData,
+  applyOrClearBySuppliedId,
+  clearAll,
+  selectBySuppliedId,
+} from '../lib/scene-alterations';
 
 const MonoscopicViewer = onTap(Viewer);
-
-const selectColor = {
-  ...ColorMaterial.create(255, 255, 0),
-  glossiness: 4,
-  specular: {
-    r: 255,
-    g: 255,
-    b: 255,
-    a: 0,
-  },
-};
 
 export default function Home(): JSX.Element {
   const viewerCtx = useViewer();
@@ -48,7 +42,7 @@ export default function Home(): JSX.Element {
 
       handleCsvUpload(fileName).then((data) => {
         const biData = createBIData(data);
-        applyBIData(biData, s).then(() => setBIData(biData));
+        applyBIData(s, biData).then(() => setBIData(biData));
       });
     });
   }, []);
@@ -72,21 +66,16 @@ export default function Home(): JSX.Element {
 
     val.display = checked;
     table.set(value, val);
-    const ids = [...biData.items.entries()]
-      .filter(([, v]) => v.value === value)
-      .map(([k]) => k);
 
     setBIData({ ...biData, table });
-    await scene
-      .items((op) => {
-        const w = op.where((q) => q.withSuppliedIds(ids));
-        return [
-          checked
-            ? w.materialOverride(ColorMaterial.fromHex(val.color))
-            : w.clearMaterialOverrides(),
-        ];
-      })
-      .execute();
+    await applyOrClearBySuppliedId(
+      scene,
+      [...biData.items.entries()]
+        .filter(([, v]) => v.value === value)
+        .map(([k]) => k),
+      val.color,
+      checked
+    );
   }
 
   async function onReset(): Promise<void> {
@@ -96,9 +85,7 @@ export default function Home(): JSX.Element {
     }
 
     setBIData(DefaultBIData);
-    await scene
-      .items((op) => [op.where((q) => q.all()).clearMaterialOverrides()])
-      .execute();
+    await clearAll(scene);
   }
 
   async function handleModelSelect(
@@ -109,28 +96,13 @@ export default function Home(): JSX.Element {
       return;
     }
 
-    if (hit?.itemSuppliedId?.value != null) {
-      const itemId = hit.itemSuppliedId.value;
-      console.debug('Selected', itemId, biData.items.get(itemId));
-
-      await scene
-        .items((op) => {
-          const ops = [
-            ...(selected
-              ? [op.where((q) => q.withSuppliedId(selected)).deselect()]
-              : []),
-            op.where((q) => q.withSuppliedId(itemId)).select(selectColor),
-          ];
-          setSelected(itemId);
-          return ops;
-        })
-        .execute();
-    } else if (selected) {
-      await scene
-        .items((op) => op.where((q) => q.withSuppliedId(selected)).deselect())
-        .execute();
-      setSelected('');
-    }
+    setSelected(
+      await selectBySuppliedId(
+        scene,
+        hit?.itemSuppliedId?.value ?? '',
+        selected
+      )
+    );
   }
 
   return (

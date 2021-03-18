@@ -1,14 +1,11 @@
 import { BIData } from './business-intelligence';
 import { ColorMaterial, Scene } from '@vertexvis/viewer';
 import { arrayChunked } from '@vertexvis/vertex-api-client';
+import { SelectColor } from './colors';
 
 const ChunkSize = 200;
 
-export async function applyBIData(biData: BIData, scene: Scene): Promise<void> {
-  if (scene == null) {
-    return;
-  }
-
+export async function applyBIData(scene: Scene, biData: BIData): Promise<void> {
   // Clear all overrides and return on empty items
   if (biData.items.size === 0)
     return await scene
@@ -48,4 +45,55 @@ export async function applyBIData(biData: BIData, scene: Scene): Promise<void> {
         ?.execute()
     ),
   ]);
+}
+
+export async function selectBySuppliedId(
+  scene: Scene,
+  suppliedId: string,
+  prevSuppliedId: string
+): Promise<string> {
+  if (suppliedId) {
+    console.debug('Selected', suppliedId);
+
+    await scene
+      .items((op) => [
+        ...(prevSuppliedId
+          ? [op.where((q) => q.withSuppliedId(prevSuppliedId)).deselect()]
+          : []),
+        op.where((q) => q.withSuppliedId(suppliedId)).select(SelectColor),
+      ])
+      .execute();
+    return suppliedId;
+  } else if (prevSuppliedId) {
+    await scene
+      .items((op) =>
+        op.where((q) => q.withSuppliedId(prevSuppliedId)).deselect()
+      )
+      .execute();
+  }
+  return '';
+}
+
+export async function applyOrClearBySuppliedId(
+  scene: Scene,
+  ids: string[],
+  color: string,
+  apply: boolean
+): Promise<void> {
+  await scene
+    .items((op) => {
+      const w = op.where((q) => q.withSuppliedIds(ids));
+      return [
+        apply
+          ? w.materialOverride(ColorMaterial.fromHex(color))
+          : w.clearMaterialOverrides(),
+      ];
+    })
+    .execute();
+}
+
+export async function clearAll(scene: Scene): Promise<void> {
+  await scene
+    .items((op) => [op.where((q) => q.all()).clearMaterialOverrides()])
+    .execute();
 }
