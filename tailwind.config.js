@@ -1,5 +1,3 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-
 module.exports = {
   purge: {
     enabled: process.env.NODE_ENV === 'production',
@@ -7,40 +5,8 @@ module.exports = {
     layers: ['base', 'components', 'utilities'],
     content: ['./src/**/*.tsx'],
   },
-  variants: {
-    extend: {
-      opacity: ['disabled'],
-    },
-  },
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-      },
-      zIndex: {
-        overlay: '10',
-        popover: '20',
-      },
-      transitionProperty: {
-        'max-height': 'max-height',
-      },
-      fontSize: {
-        xxs: '0.625rem',
-        xs: '0.75rem',
-        sm: '0.8125rem',
-        base: '0.875rem',
-        md: '0.9375rem',
-        lg: '1rem',
-        xl: '1.125rem',
-        xxl: '1.25rem',
-      },
-      maxHeight: {
-        zero: '0',
-      },
-      boxShadow: {
-        menu:
-          '-1px 2px 4px rgba(0, 0, 0, 0.12), 1px 2px 3px rgba(0, 0, 0, 0.13)',
-      },
       gridTemplateColumns: {
         16: 'repeat(16, minmax(0, 1fr))',
         20: 'repeat(20, minmax(0, 1fr))',

@@ -16,7 +16,7 @@ import {
   applyOrClearBySuppliedId,
   clearAll,
   selectBySuppliedId,
-} from '../lib/scene-alterations';
+} from '../lib/alterations';
 
 const MonoscopicViewer = onTap(Viewer);
 

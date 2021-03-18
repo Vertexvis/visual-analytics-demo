@@ -6,8 +6,6 @@
     "build": "next build",
     "dev": "next dev",
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
-    "generate:protos": "docker-compose -f ./docker-compose.yml run --rm protos",
-    "generate:types": "tailwindcss-classnames -o ./src/lib/tailwind-types.ts",
     "lint": "eslint --ext .ts,.tsx,.js,.jsx --ignore-path ./.gitignore .",
     "start": "next start"
   },
