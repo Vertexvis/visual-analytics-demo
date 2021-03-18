@@ -30,8 +30,6 @@ export async function applyBIData(biData: BIData, scene: Scene): Promise<void> {
     ChunkSize
   );
 
-  console.log(colorGroups);
-
   // Await all alterations
   await Promise.all([
     chunks.map((chunk, i) =>
@@ -43,7 +41,7 @@ export async function applyBIData(biData: BIData, scene: Scene): Promise<void> {
             : []),
           ...chunk.map((c) => {
             return op
-              .where((q) => q.withItemIds(c.itemIds))
+              .where((q) => q.withSuppliedIds(c.itemIds))
               .materialOverride(ColorMaterial.fromHex(c.color));
           }),
         ])

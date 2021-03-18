@@ -1,9 +1,9 @@
-suppliedId,tableValue,color,partName,instanceID
-5ceff05d-6401-4c37-a186-0d0ead62405f,T's Tools,#EF4444,VALVE FILLER-1,200030
-2b47cc5c-3c5a-4ae1-888f-23d3ef7c27ae,M's Machining,#F59E0B,HAND WHEEL-1,200050
-c6883fe9-5adc-43f8-9292-2c6a6513b5dd,M's Machining,,SPINDLE-1,200060
-a0917000-8746-4979-a3f7-41917d8c5db2,ACME,#6366F1,domed cap nut_din-1,200070
-43dd2545-8795-4b2e-8605-6d83952b083c,M's Machining,,BUSH-1,200090
-3736532d-c5c6-4f72-af92-9b07daf98bdd,T's Tools,,VALVE SEAT-1,200100
-2bca5bd6-aff8-4d92-8610-fa166141ebe6,T's Tools,,COLLAR-1,200120
-a4de39c3-a685-4ef6-93f7-d207aa528664,M's Machining,,PIN-1,200130
+suppliedId,tableValue,color,partName
+200030,T's Tools,#EF4444,VALVE FILLER-1
+200050,M's Machining,#F59E0B,HAND WHEEL-1
+200060,M's Machining,,SPINDLE-1
+200070,ACME,#6366F1,domed cap nut_din-1
+200090,M's Machining,,BUSH-1
+200100,T's Tools,,VALVE SEAT-1
+200120,T's Tools,,COLLAR-1
+200130,M's Machining,,PIN-1

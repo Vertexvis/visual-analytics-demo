@@ -43,7 +43,7 @@ export function createBIData(data: FileData): BIData {
   }
 
   const type = getDataType(data.items[0]);
-  console.log(`Based on first item, treating all data as ${DataType[type]}`);
+  console.debug(`Based on first item, treating all data as ${DataType[type]}`);
   switch (type) {
     case DataType.HeatMapNumbers:
       return handleHeatMapNumbers(data.items, data.name);

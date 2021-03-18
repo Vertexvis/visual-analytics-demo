@@ -17,7 +17,6 @@ export function Sidebar({
   selection,
 }: Props): JSX.Element {
   const mid = (biData.max - biData.min) / 2;
-  console.log(biData);
 
   return (
     <Panel position="right">

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ColorMaterial } from '@vertexvis/viewer';
+import { ColorMaterial, Environment } from '@vertexvis/viewer';
 import { useDropzone } from 'react-dropzone';
 import { onTap, Viewer } from '../components/Viewer';
 import { Sidebar } from '../components/Sidebar';
@@ -8,7 +8,6 @@ import {
   DefaultBIData,
   BIData,
 } from '../lib/business-intelligence';
-import { ViewerLayout } from '../layouts/ViewerLayout';
 import { handleCsvUpload } from '../lib/file-upload';
 import { useViewer } from '../lib/viewer';
 import { vertexvis } from '@vertexvis/frame-streaming-protos';
@@ -80,7 +79,7 @@ export default function Home(): JSX.Element {
     setBIData({ ...biData, table });
     await scene
       .items((op) => {
-        const w = op.where((q) => q.withItemIds(ids));
+        const w = op.where((q) => q.withSuppliedIds(ids));
         return [
           checked
             ? w.materialOverride(ColorMaterial.fromHex(val.color))
@@ -110,17 +109,17 @@ export default function Home(): JSX.Element {
       return;
     }
 
-    if (hit?.itemId?.hex != null) {
-      const itemId = hit.itemId.hex;
-      console.log('Selected', itemId, biData.items.get(itemId));
+    if (hit?.itemSuppliedId?.value != null) {
+      const itemId = hit.itemSuppliedId.value;
+      console.debug('Selected', itemId, biData.items.get(itemId));
 
       await scene
         .items((op) => {
           const ops = [
             ...(selected
-              ? [op.where((q) => q.withItemId(selected)).deselect()]
+              ? [op.where((q) => q.withSuppliedId(selected)).deselect()]
               : []),
-            op.where((q) => q.withItemId(itemId)).select(selectColor),
+            op.where((q) => q.withSuppliedId(itemId)).select(selectColor),
           ];
           setSelected(itemId);
           return ops;
@@ -128,33 +127,40 @@ export default function Home(): JSX.Element {
         .execute();
     } else if (selected) {
       await scene
-        .items((op) => op.where((q) => q.withItemId(selected)).deselect())
+        .items((op) => op.where((q) => q.withSuppliedId(selected)).deselect())
         .execute();
       setSelected('');
     }
   }
 
   return (
-    <ViewerLayout>
-      {viewerCtx.viewerState.isReady && (
-        <div className="w-0 flex-grow ml-auto relative" {...getRootProps()}>
-          <input {...getInputProps()} />
-          <MonoscopicViewer
-            configEnv={'platdev'}
-            clientId={process.env.NEXT_PUBLIC_VERTEX_CLIENT_ID ?? ''}
-            streamKey={process.env.NEXT_PUBLIC_VERTEX_STREAM_KEY ?? ''}
-            viewer={viewerCtx.viewer}
-            onSceneReady={viewerCtx.onSceneReady}
-            onSelect={handleModelSelect}
+    <main className="h-screen w-screen">
+      <div className="h-full w-full grid grid-cols-sidebar-16 grid-rows-header-6">
+        <div className="flex w-full row-span-full col-span-full">
+          {viewerCtx.viewerState.isReady && (
+            <div className="w-0 flex-grow ml-auto relative" {...getRootProps()}>
+              <input {...getInputProps()} />
+              <MonoscopicViewer
+                configEnv={
+                  (process.env.NEXT_PUBLIC_VERTEX_ENV as Environment) ??
+                  'platprod'
+                }
+                clientId={process.env.NEXT_PUBLIC_VERTEX_CLIENT_ID ?? ''}
+                streamKey={process.env.NEXT_PUBLIC_VERTEX_STREAM_KEY ?? ''}
+                viewer={viewerCtx.viewer}
+                onSceneReady={viewerCtx.onSceneReady}
+                onSelect={handleModelSelect}
+              />
+            </div>
+          )}
+          <Sidebar
+            biData={biData}
+            onCheck={onCheck}
+            onReset={onReset}
+            selection={biData.items.get(selected)}
           />
         </div>
-      )}
-      <Sidebar
-        biData={biData}
-        onCheck={onCheck}
-        onReset={onReset}
-        selection={biData.items.get(selected)}
-      />
-    </ViewerLayout>
+      </div>
+    </main>
   );
 }
