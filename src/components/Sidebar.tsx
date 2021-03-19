@@ -20,7 +20,7 @@ export function Sidebar({
 
   return (
     <Panel position="right">
-      <div className="w-full px-2 border-b">
+      <div className="w-full px-2 border-b text-gray-700">
         <Collapsible title="BUSINESS INTELLIGENCE">
           <div>
             <p className="text-center text-sm mb-4">
@@ -39,7 +39,7 @@ export function Sidebar({
             </button>
           </div>
           {biData.isHeatMap && (
-            <div className="h-40 mb-4 bg-gradient-to-b from-green-500 via-yellow-500 to-red-500 grid grid-cols-1 place-content-between text-sm rounded-md">
+            <div className="h-40 mb-4 text-black bg-gradient-to-b from-green-500 via-yellow-500 to-red-500 grid grid-cols-1 place-content-between text-sm rounded-md">
               <p className="text-center py-1">{biData.min}</p>
               <p className="text-center">
                 {mid.toFixed(mid % 1 === 0 ? 0 : 2)}

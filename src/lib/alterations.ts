@@ -1,6 +1,6 @@
-import { BIData } from './business-intelligence';
 import { ColorMaterial, Scene } from '@vertexvis/viewer';
 import { arrayChunked } from '@vertexvis/vertex-api-client';
+import { BIData } from './business-intelligence';
 import { SelectColor } from './colors';
 
 const ChunkSize = 200;
