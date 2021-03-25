@@ -1,7 +1,10 @@
 import { vertexvis } from '@vertexvis/frame-streaming-protos';
-import { Environment } from '@vertexvis/viewer';
-import Head from 'next/head';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
+import { Header } from '../components/Header';
+import { Props as LayoutProps } from '../components/Layout';
+import { LoadStreamKeyDialog } from '../components/LoadStreamKeyDialog';
 import { useDropzone } from 'react-dropzone';
 import { Sidebar } from '../components/Sidebar';
 import { onTap, Viewer } from '../components/Viewer';
@@ -11,24 +14,51 @@ import {
   clearAll,
   selectBySuppliedId,
 } from '../lib/alterations';
+import { Env } from '../lib/env';
 import {
   createBIData,
   DefaultBIData,
   BIData,
 } from '../lib/business-intelligence';
 import { handleCsvUpload } from '../lib/file-upload';
+import { waitForHydrate } from '../lib/nextjs';
+import { getClientId, getStreamKey, setItem, StorageKey } from '../lib/storage';
 import { useViewer } from '../lib/viewer';
+import { VertexLogo } from '../components/VertexLogo';
 
 const MonoscopicViewer = onTap(Viewer);
+const Layout = dynamic<LayoutProps>(
+  () => import('../components/Layout').then((m) => m.Layout),
+  { ssr: false }
+);
 
-export default function Home(): JSX.Element {
-  const viewerCtx = useViewer();
+function Home(): JSX.Element {
+  const router = useRouter();
+  const { clientId: queryId, streamKey: queryKey } = router.query;
+  const [storedId, storedKey] = [getClientId(), getStreamKey()];
+
   const [biData, setBIData] = useState<BIData>(DefaultBIData);
+  const [clientId, setClientId] = useState(
+    queryId?.toString() ||
+      storedId ||
+      '08F675C4AACE8C0214362DB5EFD4FACAFA556D463ECA00877CB225157EF58BFA'
+  );
   const [selected, setSelected] = useState<string>('');
+  const [streamKey, setStreamKey] = useState(
+    queryKey?.toString() || storedKey || 'U9cSWVb7fvS9k-NQcT28uZG6wtm6xmiG0ctU'
+  );
+  const [dialogOpen, setDialogOpen] = useState(!clientId || !streamKey);
+  const viewerCtx = useViewer();
 
   useEffect(() => {
-    document.title = 'Vertex Business Intelligence';
-  }, []);
+    router.push(
+      `/?clientId=${encodeURIComponent(
+        clientId
+      )}&streamKey=${encodeURIComponent(streamKey)}`
+    );
+    setItem(StorageKey.ClientId, clientId);
+    setItem(StorageKey.StreamKey, streamKey);
+  }, [clientId, streamKey]);
 
   const onDrop = useCallback((acceptedFiles) => {
     if (viewerCtx.viewer.current == null) {
@@ -107,43 +137,58 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <>
-      <Head>
-        <title>Vertex Business Intelligence Demo</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <link rel="icon" href="/favicon-512x512.png" />
-      </Head>
-      <main className="h-screen w-screen">
-        <div className="h-full w-full grid grid-cols-sidebar-16 grid-rows-header-6">
-          <div className="flex w-full row-span-full col-span-full">
-            {viewerCtx.viewerState.isReady && (
-              <div
-                className="w-0 flex-grow ml-auto relative"
-                {...getRootProps()}
-              >
-                <input {...getInputProps()} />
-                <MonoscopicViewer
-                  configEnv={
-                    (process.env.NEXT_PUBLIC_VERTEX_ENV as Environment) ??
-                    'platprod'
-                  }
-                  clientId={process.env.NEXT_PUBLIC_VERTEX_CLIENT_ID ?? ''}
-                  streamKey={process.env.NEXT_PUBLIC_VERTEX_STREAM_KEY ?? ''}
-                  viewer={viewerCtx.viewer}
-                  onSceneReady={viewerCtx.onSceneReady}
-                  onSelect={handleModelSelect}
-                />
-              </div>
-            )}
-            <Sidebar
-              biData={biData}
-              onCheck={onCheck}
-              onReset={onReset}
-              selection={biData.items.get(selected)}
+    <Layout title="Vertex Business Intelligence">
+      <div className="col-span-full">
+        <Header logo={<VertexLogo />}>
+          <div className="ml-4 mr-auto">
+            <button
+              className="btn btn-primary text-sm"
+              onClick={() => setDialogOpen(true)}
+            >
+              Open Scene
+            </button>
+          </div>
+        </Header>
+      </div>
+      <div className="flex w-full row-start-2 row-span-full col-start-2 col-span-full">
+        {dialogOpen && (
+          <LoadStreamKeyDialog
+            clientId={clientId}
+            streamKey={streamKey}
+            open={dialogOpen}
+            onClose={() => setDialogOpen(false)}
+            onConfirm={(clientId, streamKey) => {
+              setClientId(clientId);
+              setStreamKey(streamKey);
+              setDialogOpen(false);
+            }}
+          />
+        )}
+        {!dialogOpen && viewerCtx.viewerState.isReady && (
+          <div
+            className="flex w-full row-start-2 row-span-full col-start-2 col-span-full"
+            {...getRootProps()}
+          >
+            <input {...getInputProps()} />
+            <MonoscopicViewer
+              configEnv={Env}
+              clientId={clientId}
+              streamKey={streamKey}
+              viewer={viewerCtx.viewer}
+              onSceneReady={viewerCtx.onSceneReady}
+              onSelect={handleModelSelect}
             />
           </div>
-        </div>
-      </main>
-    </>
+        )}
+        <Sidebar
+          biData={biData}
+          onCheck={onCheck}
+          onReset={onReset}
+          selection={biData.items.get(selected)}
+        />
+      </div>
+    </Layout>
   );
 }
+
+export default waitForHydrate(Home);

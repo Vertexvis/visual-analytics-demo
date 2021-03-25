@@ -53,10 +53,10 @@ colors.csv            // Color each scene item the corresponding color.
 
 1. Clone repository, `git clone git@github.com:Vertexvis/business-intelligence-demo.git`
 1. Copy `.env.local.template` to `.env.local` and optionally edit values
-1. Run `docker-compose up app`
+1. Run `docker-compose up`
 1. Browse to http://localhost:3000
 
-If you pull down changes, you'll need to run `docker-compose build app` to build them and then `docker-compose up app` again.
+If you pull down changes, you'll need to run `docker-compose build` to build them and then `docker-compose up` again.
 
 ## Local development
 
@@ -75,3 +75,11 @@ src/
   lib/        // Shared libraries and utilities
   pages/      // Pages served by NextJS
 ```
+
+### Deployment
+
+A few options for deployment,
+
+- [Vercel](https://nextjs.org/docs/deployment)
+- [Netlify](https://www.netlify.com/blog/2020/11/30/how-to-deploy-next.js-sites-to-netlify/)
+- [AWS CDK](https://github.com/serverless-nextjs/serverless-next.js#readme)
