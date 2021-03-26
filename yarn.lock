@@ -376,28 +376,28 @@
   resolved "https://registry.yarnpkg.com/@vertexvis/frame-streaming-protos/-/frame-streaming-protos-0.4.4.tgz#933ba90ce3ca860291705c89211f4bcd95f3e7d9"
   integrity sha512-+sWojrc+/kcGq3Bb+CwfoeDnGt/b8xcO5psbH7xnXvA75IapAd6w8IPzgUX5hKyYcvgk0ooroLA9h1ePja3jkg==
 
-"@vertexvis/geometry@^0.9.25-canary.1":
-  version "0.9.25-canary.1"
-  resolved "https://registry.yarnpkg.com/@vertexvis/geometry/-/geometry-0.9.25-canary.1.tgz#c7ac3e04d5b4b77100d62f9f56ca6fb2df583824"
-  integrity sha512-jlBVn0Aja5jT2R52B2vyBUmjBj1+GKr4Z5ltZgnYNLxOQZGojtwQaZE6daavQAS75TuSDTHMLVtI8dVi12GNnQ==
+"@vertexvis/geometry@^0.9.25-canary.2":
+  version "0.9.25-canary.2"
+  resolved "https://registry.yarnpkg.com/@vertexvis/geometry/-/geometry-0.9.25-canary.2.tgz#297f564e387f5a6de09465749a67a8a21e86b80c"
+  integrity sha512-XO2g8n9W3fCmEXAm7M/uEqH/aWg0y4EbGITn+LY0wtbVbCSIXc4rMBRtenwUVE/c9T/r9ZZLsBxnynW06QTtSw==
 
-"@vertexvis/stream-api@^0.9.25-canary.1":
-  version "0.9.25-canary.1"
-  resolved "https://registry.yarnpkg.com/@vertexvis/stream-api/-/stream-api-0.9.25-canary.1.tgz#504f88ccc1a4e77b67d082b805252cd174440ebe"
-  integrity sha512-gpQPnKI51Iv9G8LE2PJ9rIMadDt3idErJHRzZygoJUe29ReILXOC8kwHO/wA8PAS839BUxoFvlRrcUecNP3Bfw==
+"@vertexvis/stream-api@^0.9.25-canary.2":
+  version "0.9.25-canary.2"
+  resolved "https://registry.yarnpkg.com/@vertexvis/stream-api/-/stream-api-0.9.25-canary.2.tgz#b22c9a1e4fab1100ea3128c95f73f529f6794a18"
+  integrity sha512-HXv3cwFHBjhI8nFg3RZ02NZ7N0EHjaHKmghN317xSrUn3h6yfb9r3D8zo1bxmu1/cY4t7ZalV8PE7Oz+wAVepQ==
   dependencies:
     "@vertexvis/frame-streaming-protos" "^0.4.2"
-    "@vertexvis/utils" "^0.9.25-canary.1"
+    "@vertexvis/utils" "^0.9.25-canary.2"
 
 "@vertexvis/typescript-config-vertexvis@^1.1":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@vertexvis/typescript-config-vertexvis/-/typescript-config-vertexvis-1.1.0.tgz#371602ea2ebff0ec3da90a019ea654a1e50736ae"
   integrity sha512-XB8K37u2wSuK1EHxL6haW5jBhdvT5IQ/zcae80NcnZuO85pSRC6Yy4R36Khm77hV0NkZkKMWMKVP9U0OYGe11g==
 
-"@vertexvis/utils@^0.9.25-canary.1":
-  version "0.9.25-canary.1"
-  resolved "https://registry.yarnpkg.com/@vertexvis/utils/-/utils-0.9.25-canary.1.tgz#0150eb6040f11f0e8f6d4e0d71afadbc505166dc"
-  integrity sha512-x9ZgsA1KzPpHXER7Oswf0sgttMJ58S4gpdJG8og76EtRHVRB1lHaOxycytuJKfEVKRLI1r+1wJP5FhbjYPoMwQ==
+"@vertexvis/utils@^0.9.25-canary.2":
+  version "0.9.25-canary.2"
+  resolved "https://registry.yarnpkg.com/@vertexvis/utils/-/utils-0.9.25-canary.2.tgz#3e97c8b15cb8b39f2386b2fc3b01575345586597"
+  integrity sha512-FVAG6dATYEHEftPPMQgqT/tBStREqPnOzOLDzUqe55LKPcXs5Kip5eml9IQnKIpoHpWdj9I3xY2F88HgeIkOcw==
   dependencies:
     "@types/uuid" "^3.4.3"
     is-plain-object "^3.0.0"
@@ -411,24 +411,24 @@
     axios "^0.21"
     p-limit "^3.1"
 
-"@vertexvis/viewer-react@^0.9.25-canary.1":
-  version "0.9.25-canary.1"
-  resolved "https://registry.yarnpkg.com/@vertexvis/viewer-react/-/viewer-react-0.9.25-canary.1.tgz#b5752061722565f67bafee0ce3ef97adbefebd21"
-  integrity sha512-nKfnnLIpdrv9nuN4F97IhYhLjxH8l/MIJ2FUyHeGY01NjSeu1lIk8J4ci6Wq7a5WRrcmEdplKQc0FhcZK6JnWA==
+"@vertexvis/viewer-react@^0.9.25-canary.2":
+  version "0.9.25-canary.2"
+  resolved "https://registry.yarnpkg.com/@vertexvis/viewer-react/-/viewer-react-0.9.25-canary.2.tgz#21391f655d1e70b597c0229bceffbc1ada0b3949"
+  integrity sha512-xdpDWZK60hoItFlt8VPHGhBhpoaU9F2KTd7aFqI+0TZ76Nk4g8liqW3vGVX3+5UqVyhMd0oaAvUK70zpche7KQ==
   dependencies:
-    "@vertexvis/viewer" "^0.9.25-canary.1"
+    "@vertexvis/viewer" "^0.9.25-canary.2"
 
-"@vertexvis/viewer@^0.9.25-canary.1":
-  version "0.9.25-canary.1"
-  resolved "https://registry.yarnpkg.com/@vertexvis/viewer/-/viewer-0.9.25-canary.1.tgz#054add507f675ad6a87f88675082382ab31f0959"
-  integrity sha512-1pWV0AHiaRiaDnrSAtf8wVNO3rDxDXkA93lysQoqrrMeEBO6TA4FDOplyITlJi5F9ZslrXm+e2J0dYn8I1V2CA==
+"@vertexvis/viewer@^0.9.25-canary.2":
+  version "0.9.25-canary.2"
+  resolved "https://registry.yarnpkg.com/@vertexvis/viewer/-/viewer-0.9.25-canary.2.tgz#5ded3d1295acdf796bcd740f890af2e41f0e56ce"
+  integrity sha512-PY+S06VTk3QZTQvvI2Ycpke1sqQxHy6fJUSGuHDl+ji27pdcARzTnoFAn04cvfgURalu00cabYuDpwA+tuO6fg==
   dependencies:
     "@juggle/resize-observer" "^3.3.0"
     "@types/classnames" "2.2.11"
     "@vertexvis/frame-streaming-protos" "^0.4.2"
-    "@vertexvis/geometry" "^0.9.25-canary.1"
-    "@vertexvis/stream-api" "^0.9.25-canary.1"
-    "@vertexvis/utils" "^0.9.25-canary.1"
+    "@vertexvis/geometry" "^0.9.25-canary.2"
+    "@vertexvis/stream-api" "^0.9.25-canary.2"
+    "@vertexvis/utils" "^0.9.25-canary.2"
     classnames "2.2.6"
     protobufjs "^6.9.0"
     tslib "^2.1.0"

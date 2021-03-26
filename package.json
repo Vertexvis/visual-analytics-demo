@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@vertexvis/frame-streaming-protos": "^0.4",
-    "@vertexvis/utils": "^0.9.25-canary.1",
+    "@vertexvis/utils": "^0.9.25-canary.2",
     "@vertexvis/vertex-api-client": "^0.10",
-    "@vertexvis/viewer": "^0.9.25-canary.1",
-    "@vertexvis/viewer-react": "^0.9.25-canary.1",
+    "@vertexvis/viewer": "^0.9.25-canary.2",
+    "@vertexvis/viewer-react": "^0.9.25-canary.2",
     "next": "10.0.10-canary.7",
     "papaparse": "^5.3",
     "react": "^17",
