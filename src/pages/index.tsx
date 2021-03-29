@@ -1,4 +1,3 @@
-import { vertexvis } from '@vertexvis/frame-streaming-protos';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -22,7 +21,13 @@ import {
 } from '../lib/business-intelligence';
 import { handleCsvUpload } from '../lib/file-upload';
 import { waitForHydrate } from '../lib/nextjs';
-import { getClientId, getStreamKey, setItem, StorageKey } from '../lib/storage';
+import {
+  ClientId,
+  getClientId,
+  getStreamKey,
+  setItem,
+  StreamKey,
+} from '../lib/storage';
 import { useViewer } from '../lib/viewer';
 import { VertexLogo } from '../components/VertexLogo';
 
@@ -56,8 +61,8 @@ function Home(): JSX.Element {
         clientId
       )}&streamKey=${encodeURIComponent(streamKey)}`
     );
-    setItem(StorageKey.ClientId, clientId);
-    setItem(StorageKey.StreamKey, streamKey);
+    setItem(ClientId, clientId);
+    setItem(StreamKey, streamKey);
   }, [clientId, streamKey]);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -119,23 +124,6 @@ function Home(): JSX.Element {
     await clearAll(scene);
   }
 
-  async function handleModelSelect(
-    hit?: vertexvis.protobuf.stream.IHit
-  ): Promise<void> {
-    const scene = await viewerCtx.viewer.current?.scene();
-    if (scene == null) {
-      return;
-    }
-
-    setSelected(
-      await selectBySuppliedId(
-        scene,
-        hit?.itemSuppliedId?.value ?? '',
-        selected
-      )
-    );
-  }
-
   return (
     <Layout title="Vertex Business Intelligence">
       <div className="col-span-full">
@@ -176,7 +164,18 @@ function Home(): JSX.Element {
               streamKey={streamKey}
               viewer={viewerCtx.viewer}
               onSceneReady={viewerCtx.onSceneReady}
-              onSelect={handleModelSelect}
+              onSelect={async (hit) => {
+                const scene = await viewerCtx.viewer.current?.scene();
+                if (scene == null) return;
+
+                setSelected(
+                  await selectBySuppliedId(
+                    scene,
+                    hit?.itemSuppliedId?.value ?? '',
+                    selected
+                  )
+                );
+              }}
             />
           </div>
         )}
