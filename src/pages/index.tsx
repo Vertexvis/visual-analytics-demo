@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Header } from '../components/Header';
 import { Props as LayoutProps } from '../components/Layout';
-import { LoadStreamKeyDialog } from '../components/LoadStreamKeyDialog';
+import { StreamCredsDialog } from '../components/StreamCredsDialog';
 import { useDropzone } from 'react-dropzone';
 import { Sidebar } from '../components/Sidebar';
 import { onTap, Viewer } from '../components/Viewer';
@@ -21,13 +21,8 @@ import {
 } from '../lib/business-intelligence';
 import { handleCsvUpload } from '../lib/file-upload';
 import { waitForHydrate } from '../lib/nextjs';
-import {
-  ClientId,
-  getClientId,
-  getStreamKey,
-  setItem,
-  StreamKey,
-} from '../lib/storage';
+import { getStoredCreds, setStoredCreds } from '../lib/storage';
+import { StreamCreds } from '../lib/types';
 import { useViewer } from '../lib/viewer';
 import { VertexLogo } from '../components/VertexLogo';
 
@@ -40,51 +35,52 @@ const Layout = dynamic<LayoutProps>(
 function Home(): JSX.Element {
   const router = useRouter();
   const { clientId: queryId, streamKey: queryKey } = router.query;
-  const [storedId, storedKey] = [getClientId(), getStreamKey()];
-
-  const [biData, setBIData] = useState<BIData>(DefaultBIData);
-  const [clientId, setClientId] = useState(
-    queryId?.toString() ||
-      storedId ||
-      '08F675C4AACE8C0214362DB5EFD4FACAFA556D463ECA00877CB225157EF58BFA'
-  );
-  const [selected, setSelected] = useState<string>('');
-  const [streamKey, setStreamKey] = useState(
-    queryKey?.toString() || storedKey || 'U9cSWVb7fvS9k-NQcT28uZG6wtm6xmiG0ctU'
-  );
-  const [dialogOpen, setDialogOpen] = useState(!clientId || !streamKey);
+  const storedCreds = getStoredCreds();
   const viewerCtx = useViewer();
+
+  const [creds, setCreds] = useState<StreamCreds>({
+    clientId:
+      queryId?.toString() ||
+      storedCreds.clientId ||
+      '08F675C4AACE8C0214362DB5EFD4FACAFA556D463ECA00877CB225157EF58BFA',
+    streamKey:
+      queryKey?.toString() ||
+      storedCreds.streamKey ||
+      'U9cSWVb7fvS9k-NQcT28uZG6wtm6xmiG0ctU',
+  });
+  const [dialogOpen, setDialogOpen] = useState(
+    !creds.clientId || !creds.streamKey
+  );
+  const [biData, setBIData] = useState<BIData>(DefaultBIData);
+  const [selected, setSelected] = useState<string>('');
 
   useEffect(() => {
     router.push(
       `/?clientId=${encodeURIComponent(
-        clientId
-      )}&streamKey=${encodeURIComponent(streamKey)}`
+        creds.clientId
+      )}&streamKey=${encodeURIComponent(creds.streamKey)}`
     );
-    setItem(ClientId, clientId);
-    setItem(StreamKey, streamKey);
-  }, [clientId, streamKey]);
+    setStoredCreds(creds);
+  }, [creds]);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    if (viewerCtx.viewer.current == null) {
-      return;
-    }
-
-    const fileName = acceptedFiles[0];
-    viewerCtx.viewer.current.scene().then((s) => {
-      if (s == null) {
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: useCallback((acceptedFiles) => {
+      if (viewerCtx.viewer.current == null) {
         return;
       }
 
-      handleCsvUpload(fileName).then((data) => {
-        const biData = createBIData(data);
-        applyBIData(s, biData).then(() => setBIData(biData));
-      });
-    });
-  }, []);
+      const fileName = acceptedFiles[0];
+      viewerCtx.viewer.current.scene().then((s) => {
+        if (s == null) {
+          return;
+        }
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
+        handleCsvUpload(fileName).then((data) => {
+          const biData = createBIData(data);
+          applyBIData(s, biData).then(() => setBIData(biData));
+        });
+      });
+    }, []),
     noClick: true,
   });
 
@@ -114,16 +110,6 @@ function Home(): JSX.Element {
     );
   }
 
-  async function onReset(): Promise<void> {
-    const scene = await viewerCtx.viewer.current?.scene();
-    if (scene == null) {
-      return;
-    }
-
-    setBIData(DefaultBIData);
-    await clearAll(scene);
-  }
-
   return (
     <Layout title="Vertex Business Intelligence">
       <div className="col-span-full">
@@ -139,19 +125,6 @@ function Home(): JSX.Element {
         </Header>
       </div>
       <div className="flex w-full row-start-2 row-span-full col-start-2 col-span-full">
-        {dialogOpen && (
-          <LoadStreamKeyDialog
-            clientId={clientId}
-            streamKey={streamKey}
-            open={dialogOpen}
-            onClose={() => setDialogOpen(false)}
-            onConfirm={(clientId, streamKey) => {
-              setClientId(clientId);
-              setStreamKey(streamKey);
-              setDialogOpen(false);
-            }}
-          />
-        )}
         {!dialogOpen && viewerCtx.viewerState.isReady && (
           <div
             className="flex w-full row-start-2 row-span-full col-start-2 col-span-full"
@@ -160,8 +133,7 @@ function Home(): JSX.Element {
             <input {...getInputProps()} />
             <MonoscopicViewer
               configEnv={Env}
-              clientId={clientId}
-              streamKey={streamKey}
+              creds={creds}
               viewer={viewerCtx.viewer}
               onSceneReady={viewerCtx.onSceneReady}
               onSelect={async (hit) => {
@@ -182,10 +154,29 @@ function Home(): JSX.Element {
         <Sidebar
           biData={biData}
           onCheck={onCheck}
-          onReset={onReset}
+          onReset={async () => {
+            const scene = await viewerCtx.viewer.current?.scene();
+            if (scene == null) {
+              return;
+            }
+
+            setBIData(DefaultBIData);
+            await clearAll(scene);
+          }}
           selection={biData.items.get(selected)}
         />
       </div>
+      {dialogOpen && (
+        <StreamCredsDialog
+          creds={creds}
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          onConfirm={(creds) => {
+            setCreds(creds);
+            setDialogOpen(false);
+          }}
+        />
+      )}
     </Layout>
   );
 }

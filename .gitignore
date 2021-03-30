@@ -13,3 +13,4 @@ yarn-error.log*
 /coverage
 /node_modules
 /out
+/test-data
