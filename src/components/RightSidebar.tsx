@@ -7,30 +7,33 @@ interface Props {
   biData: BIData;
   onCheck: (value: string, checked: boolean) => Promise<void>;
   onReset: () => Promise<void>;
-  selection?: { color: string; value: number | string };
 }
 
-export function Sidebar({
-  biData,
-  onCheck,
-  onReset,
-  selection,
-}: Props): JSX.Element {
+export function RightSidebar({ biData, onCheck, onReset }: Props): JSX.Element {
   const mid = (biData.max - biData.min) / 2;
 
   return (
-    <Panel position="right">
-      <div className="w-full px-2 border-b text-gray-700">
+    <Panel position="right" overlay={false}>
+      <div className="w-full pr-2 border-b text-gray-700 text-sm">
         <Collapsible title="BUSINESS INTELLIGENCE">
           <div>
-            <p className="text-center text-sm mb-4">
-              {biData.name ?? 'No data loaded'}
-            </p>
-            <p className="my-4 text-center text-sm">
-              {selection?.value ?? 'No data'}
+            <p className="text-center mb-4">
+              {biData.name ?? (
+                <span>
+                  No data loaded. Find example data{' '}
+                  <a
+                    className={'text-blue-600'}
+                    href="https://github.com/Vertexvis/business-intelligence-demo/tree/main/data"
+                    target="_blank"
+                  >
+                    here
+                  </a>{' '}
+                  that you can drag and drop onto the vertex-valve model.
+                </span>
+              )}
             </p>
           </div>
-          <div className="my-4 text-sm flex justify-center">
+          <div className="my-4 flex justify-center">
             <button
               className="px-3 py-2 bg-gray-200 rounded-md"
               onClick={onReset}

@@ -19,7 +19,7 @@ export function Collapsible({ title, children }: Props): JSX.Element {
   }, [contentRef, setMaxHeight, children]);
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full">
       <div
         data-testid="expand-click-target"
         className="flex items-center cursor-pointer hover:text-blue-700 py-3"
@@ -29,9 +29,7 @@ export function Collapsible({ title, children }: Props): JSX.Element {
         <div
           className={cn(
             'flex-center transition-transform duration-200 ml-auto',
-            {
-              'transform rotate-90': open,
-            }
+            { 'transform rotate-90': open }
           )}
         >
           <div className="w-4">
@@ -43,7 +41,7 @@ export function Collapsible({ title, children }: Props): JSX.Element {
         data-testid="expand-content"
         ref={contentRef}
         style={{ maxHeight: open ? `${maxHeight}px` : '0' }}
-        className="origin-top duration-200 ease-in-out overflow-hidden pl-2"
+        className="origin-top duration-200 ease-in-out overflow-y-hidden pl-2"
       >
         {children}
       </div>

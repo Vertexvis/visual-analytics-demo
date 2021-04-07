@@ -5,14 +5,14 @@ import { Header } from '../components/Header';
 import { Props as LayoutProps } from '../components/Layout';
 import { StreamCredsDialog } from '../components/StreamCredsDialog';
 import { useDropzone } from 'react-dropzone';
-import { Sidebar } from '../components/Sidebar';
+import { RightSidebar } from '../components/RightSidebar';
 import { onTap, Viewer } from '../components/Viewer';
 import {
   applyBIData,
   applyOrClearBySuppliedId,
   clearAll,
-  selectBySuppliedId,
-} from '../lib/alterations';
+  selectByHit,
+} from '../lib/scene-items';
 import { Env } from '../lib/env';
 import {
   createBIData,
@@ -21,8 +21,7 @@ import {
 } from '../lib/business-intelligence';
 import { handleCsvUpload } from '../lib/file-upload';
 import { waitForHydrate } from '../lib/nextjs';
-import { getStoredCreds, setStoredCreds } from '../lib/storage';
-import { StreamCreds } from '../lib/types';
+import { getStoredCreds, setStoredCreds, StreamCreds } from '../lib/storage';
 import { useViewer } from '../lib/viewer';
 import { VertexLogo } from '../components/VertexLogo';
 
@@ -52,7 +51,6 @@ function Home(): JSX.Element {
     !creds.clientId || !creds.streamKey
   );
   const [biData, setBIData] = useState<BIData>(DefaultBIData);
-  const [selected, setSelected] = useState<string>('');
 
   useEffect(() => {
     router.push(
@@ -65,19 +63,13 @@ function Home(): JSX.Element {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: useCallback((acceptedFiles) => {
-      if (viewerCtx.viewer.current == null) {
-        return;
-      }
+      if (viewerCtx.viewer.current == null) return;
 
       const fileName = acceptedFiles[0];
       viewerCtx.viewer.current.scene().then((s) => {
-        if (s == null) {
-          return;
-        }
-
         handleCsvUpload(fileName).then((data) => {
-          const biData = createBIData(data);
-          applyBIData(s, biData).then(() => setBIData(biData));
+          const bi = createBIData(data);
+          applyBIData({ biData: bi, scene: s }).then(() => setBIData(bi));
         });
       });
     }, []),
@@ -85,29 +77,24 @@ function Home(): JSX.Element {
   });
 
   async function onCheck(value: string, checked: boolean): Promise<void> {
-    const scene = await viewerCtx.viewer.current?.scene();
     const table = biData.table;
-    if (scene == null || table == null) {
-      return;
-    }
+    if (table == null) return;
 
     const val = table.get(value);
-    if (val == null) {
-      return;
-    }
+    if (val == null) return;
 
     val.display = checked;
     table.set(value, val);
 
     setBIData({ ...biData, table });
-    await applyOrClearBySuppliedId(
-      scene,
-      [...biData.items.entries()]
+    await applyOrClearBySuppliedId({
+      apply: checked,
+      color: val.color,
+      ids: [...biData.items.entries()]
         .filter(([, v]) => v.value === value)
         .map(([k]) => k),
-      val.color,
-      checked
-    );
+      scene: await viewerCtx.viewer.current?.scene(),
+    });
   }
 
   return (
@@ -136,34 +123,22 @@ function Home(): JSX.Element {
               creds={creds}
               viewer={viewerCtx.viewer}
               onSceneReady={viewerCtx.onSceneReady}
-              onSelect={async (hit) => {
-                const scene = await viewerCtx.viewer.current?.scene();
-                if (scene == null) return;
-
-                setSelected(
-                  await selectBySuppliedId(
-                    scene,
-                    hit?.itemSuppliedId?.value ?? '',
-                    selected
-                  )
-                );
-              }}
+              onSelect={async (hit) =>
+                await selectByHit({
+                  hit: hit,
+                  scene: await viewerCtx.viewer.current?.scene(),
+                })
+              }
             />
           </div>
         )}
-        <Sidebar
+        <RightSidebar
           biData={biData}
           onCheck={onCheck}
           onReset={async () => {
-            const scene = await viewerCtx.viewer.current?.scene();
-            if (scene == null) {
-              return;
-            }
-
             setBIData(DefaultBIData);
-            await clearAll(scene);
+            await clearAll({ scene: await viewerCtx.viewer.current?.scene() });
           }}
-          selection={biData.items.get(selected)}
         />
       </div>
       {dialogOpen && (
@@ -171,8 +146,8 @@ function Home(): JSX.Element {
           creds={creds}
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
-          onConfirm={(creds) => {
-            setCreds(creds);
+          onConfirm={(cs) => {
+            setCreds(cs);
             setDialogOpen(false);
           }}
         />
