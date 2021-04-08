@@ -113,10 +113,7 @@ function Home(): JSX.Element {
       </div>
       <div className="flex w-full row-start-2 row-span-full col-start-2 col-span-full">
         {!dialogOpen && viewerCtx.viewerState.isReady && (
-          <div
-            className="flex w-full row-start-2 row-span-full col-start-2 col-span-full"
-            {...getRootProps()}
-          >
+          <div className="w-0 flex-grow ml-auto relative" {...getRootProps()}>
             <input {...getInputProps()} />
             <MonoscopicViewer
               configEnv={Env}

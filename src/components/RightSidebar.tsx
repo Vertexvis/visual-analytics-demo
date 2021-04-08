@@ -20,7 +20,7 @@ export function RightSidebar({ biData, onCheck, onReset }: Props): JSX.Element {
             <p className="text-center mb-4">
               {biData.name ?? (
                 <span>
-                  No data loaded. Find example data{' '}
+                  No data loaded. Find vertex-valve example data{' '}
                   <a
                     className={'text-blue-600'}
                     href="https://github.com/Vertexvis/business-intelligence-demo/tree/main/data"
@@ -28,7 +28,7 @@ export function RightSidebar({ biData, onCheck, onReset }: Props): JSX.Element {
                   >
                     here
                   </a>{' '}
-                  that you can drag and drop onto the vertex-valve model.
+                  that you can drag and drop onto the model.
                 </span>
               )}
             </p>
