@@ -1,7 +1,7 @@
 import { VertexSceneTree, JSX as ViewerJSX } from '@vertexvis/viewer-react';
+import { Row } from '@vertexvis/viewer/dist/types/components/scene-tree/lib/row';
 import { Environment } from '@vertexvis/viewer/dist/types/config/environment';
 import React, { useEffect, useRef } from 'react';
-import { Row } from '../../../vertex-web-sdk/node_modules/@vertexvis/viewer/dist/types/components/scene-tree/lib/row';
 import { BIData } from '../lib/business-intelligence';
 import { Template } from './Template';
 
