@@ -15,23 +15,24 @@ export interface ViewerContext {
 
 interface ViewerState {
   readonly isReady: boolean;
+  readonly isRefReady: boolean;
 }
 
 export function useViewer(): ViewerContext {
   const ref = useRef<HTMLVertexViewerElement>(null);
-  const [state, setState] = useState<ViewerState>({ isReady: false });
+  const [state, setState] = useState<ViewerState>({
+    isReady: false,
+    isRefReady: false,
+  });
 
   const onSceneReady = useCallback(() => {
-    setState({ ...state });
-  }, [state]);
+    setState({ ...state, isRefReady: ref.current != null });
+  }, [ref.current]);
 
   useEffect(() => {
-    async function setup(): Promise<void> {
-      await defineCustomElements();
-      setState({ ...(state ?? {}), isReady: true });
+    if (!state.isReady) {
+      defineCustomElements().then(() => setState({ ...state, isReady: true }));
     }
-
-    if (!state.isReady) setup();
   }, [state]);
 
   return { ref, state, onSceneReady };

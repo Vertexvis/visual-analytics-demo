@@ -12,18 +12,18 @@ export interface Props extends ViewerJSX.VertexSceneTree {
 }
 
 export function Tree({ biData, configEnv, viewer }: Props): JSX.Element {
-  const treeRef = useRef<HTMLVertexSceneTreeElement>(null);
+  const ref = useRef<HTMLVertexSceneTreeElement>(null);
 
   useEffect(() => {
-    if (treeRef.current && treeRef.current.invalidateRows) {
-      treeRef.current.invalidateRows();
+    if (ref.current && ref.current.invalidateRows) {
+      ref.current.invalidateRows();
     }
   }, [biData]);
 
   return (
     <VertexSceneTree
       configEnv={configEnv}
-      ref={treeRef}
+      ref={ref}
       rowData={(row: Row) => {
         const item = biData.items.get(row?.suppliedId ?? '');
         return item
