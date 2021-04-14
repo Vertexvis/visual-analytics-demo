@@ -1,76 +1,65 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { Header } from '../components/Header';
 import { Props as LayoutProps } from '../components/Layout';
-import { StreamCredsDialog } from '../components/StreamCredsDialog';
-import { useDropzone } from 'react-dropzone';
+import { encode, OpenButton, OpenDialog } from '../components/OpenSceneDialog';
 import { RightSidebar } from '../components/RightSidebar';
-import { onTap, Viewer } from '../components/Viewer';
+import { Tree } from '../components/Tree';
+import { Viewer } from '../components/Viewer';
+import { VertexLogo } from '../components/VertexLogo';
+import {
+  createBIData,
+  DefaultBIData,
+  BIData,
+} from '../lib/business-intelligence';
+import { DefaultClientId, DefaultStreamKey, Env } from '../lib/env';
+import { handleCsvUpload } from '../lib/file-upload';
 import {
   applyBIData,
   applyOrClearBySuppliedId,
   clearAll,
   selectByHit,
 } from '../lib/scene-items';
-import { Env } from '../lib/env';
 import {
-  createBIData,
-  DefaultBIData,
-  BIData,
-} from '../lib/business-intelligence';
-import { handleCsvUpload } from '../lib/file-upload';
-import { waitForHydrate } from '../lib/nextjs';
-import { getStoredCreds, setStoredCreds, StreamCreds } from '../lib/storage';
+  getStoredCreds,
+  setStoredCreds,
+  StreamCredentials,
+} from '../lib/storage';
 import { useViewer } from '../lib/viewer';
-import { VertexLogo } from '../components/VertexLogo';
 
-const MonoscopicViewer = onTap(Viewer);
 const Layout = dynamic<LayoutProps>(
   () => import('../components/Layout').then((m) => m.Layout),
   { ssr: false }
 );
 
-function Home(): JSX.Element {
+export default function Home(): JSX.Element {
+  const viewer = useViewer();
   const router = useRouter();
   const { clientId: queryId, streamKey: queryKey } = router.query;
-  const storedCreds = getStoredCreds();
-  const viewerCtx = useViewer();
-
-  const [creds, setCreds] = useState<StreamCreds>({
-    clientId:
-      queryId?.toString() ||
-      storedCreds.clientId ||
-      '08F675C4AACE8C0214362DB5EFD4FACAFA556D463ECA00877CB225157EF58BFA',
-    streamKey:
-      queryKey?.toString() ||
-      storedCreds.streamKey ||
-      'U9cSWVb7fvS9k-NQcT28uZG6wtm6xmiG0ctU',
+  const stored = getStoredCreds();
+  const [credentials, setCredentials] = useState<StreamCredentials>({
+    clientId: queryId?.toString() || stored.clientId || DefaultClientId,
+    streamKey: queryKey?.toString() || stored.streamKey || DefaultStreamKey,
   });
-  const [dialogOpen, setDialogOpen] = useState(
-    !creds.clientId || !creds.streamKey
-  );
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [biData, setBIData] = useState<BIData>(DefaultBIData);
 
   useEffect(() => {
-    router.push(
-      `/?clientId=${encodeURIComponent(
-        creds.clientId
-      )}&streamKey=${encodeURIComponent(creds.streamKey)}`
-    );
-    setStoredCreds(creds);
-  }, [creds]);
+    router.push(encode(credentials));
+    setStoredCreds(credentials);
+  }, [credentials]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: useCallback((acceptedFiles) => {
-      if (viewerCtx.viewer.current == null) return;
+      if (viewer.ref.current == null) return;
 
-      const fileName = acceptedFiles[0];
-      viewerCtx.viewer.current.scene().then((s) => {
-        handleCsvUpload(fileName).then((data) => {
-          const bi = createBIData(data);
-          applyBIData({ biData: bi, scene: s }).then(() => setBIData(bi));
-        });
+      handleCsvUpload(acceptedFiles[0]).then((data) => {
+        const bi = createBIData(data);
+        applyBIData({ biData: bi, viewer: viewer.ref.current }).then(() =>
+          setBIData(bi)
+        );
       });
     }, []),
     noClick: true,
@@ -93,38 +82,44 @@ function Home(): JSX.Element {
       ids: [...biData.items.entries()]
         .filter(([, v]) => v.value === value)
         .map(([k]) => k),
-      scene: await viewerCtx.viewer.current?.scene(),
+      viewer: viewer.ref.current,
     });
   }
 
-  return (
+  return router.isReady ? (
     <Layout title="Vertex Business Intelligence">
       <div className="col-span-full">
         <Header logo={<VertexLogo />}>
-          <div className="ml-4 mr-auto">
-            <button
-              className="btn btn-primary text-sm"
-              onClick={() => setDialogOpen(true)}
-            >
-              Open Scene
-            </button>
-          </div>
+          <OpenButton onClick={() => setDialogOpen(true)} />
         </Header>
       </div>
+      {dialogOpen && (
+        <OpenDialog
+          creds={credentials}
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          onConfirm={(cs) => {
+            setCredentials(cs);
+            setDialogOpen(false);
+          }}
+        />
+      )}
       <div className="flex w-full row-start-2 row-span-full col-start-2 col-span-full">
-        {!dialogOpen && viewerCtx.viewerState.isReady && (
+        <Tree
+          biData={biData}
+          configEnv={Env}
+          viewer={viewer.ref.current ?? undefined}
+        />
+        {credentials.clientId && credentials.streamKey && viewer.state.isReady && (
           <div className="w-0 flex-grow ml-auto relative" {...getRootProps()}>
             <input {...getInputProps()} />
-            <MonoscopicViewer
+            <Viewer
               configEnv={Env}
-              creds={creds}
-              viewer={viewerCtx.viewer}
-              onSceneReady={viewerCtx.onSceneReady}
+              credentials={credentials}
+              viewer={viewer.ref}
+              onSceneReady={viewer.onSceneReady}
               onSelect={async (hit) =>
-                await selectByHit({
-                  hit: hit,
-                  scene: await viewerCtx.viewer.current?.scene(),
-                })
+                await selectByHit({ hit: hit, viewer: viewer.ref.current })
               }
             />
           </div>
@@ -134,23 +129,12 @@ function Home(): JSX.Element {
           onCheck={onCheck}
           onReset={async () => {
             setBIData(DefaultBIData);
-            await clearAll({ scene: await viewerCtx.viewer.current?.scene() });
+            await clearAll({ viewer: viewer.ref.current });
           }}
         />
       </div>
-      {dialogOpen && (
-        <StreamCredsDialog
-          creds={creds}
-          open={dialogOpen}
-          onClose={() => setDialogOpen(false)}
-          onConfirm={(cs) => {
-            setCreds(cs);
-            setDialogOpen(false);
-          }}
-        />
-      )}
     </Layout>
+  ) : (
+    <></>
   );
 }
-
-export default waitForHydrate(Home);

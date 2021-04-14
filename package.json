@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@vertexvis/frame-streaming-protos": "^0.5",
-    "@vertexvis/utils": "^0.9.25",
+    "@vertexvis/utils": "^0.9.26-canary.1",
     "@vertexvis/vertex-api-client": "^0.10",
-    "@vertexvis/viewer": "^0.9.25",
-    "@vertexvis/viewer-react": "^0.9.25",
+    "@vertexvis/viewer": "^0.9.26-canary.1",
+    "@vertexvis/viewer-react": "^0.9.26-canary.1",
     "classnames": "^2.3",
     "next": "10.1",
     "papaparse": "^5.3",
@@ -31,10 +31,11 @@
     "@vertexvis/eslint-config-vertexvis-typescript": "^0.4",
     "@vertexvis/typescript-config-vertexvis": "^1.1",
     "autoprefixer": "^10.2",
-    "eslint": "^7.23",
+    "eslint": "^7.24",
     "postcss": "^8.2",
     "prettier": "^2.2",
     "tailwindcss": "^2.1",
+    "tslib": "^2.2.0",
     "typescript": "^4.2"
   }
 }
