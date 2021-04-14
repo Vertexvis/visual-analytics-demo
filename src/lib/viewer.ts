@@ -8,33 +8,32 @@ import {
 } from 'react';
 
 export interface ViewerContext {
-  readonly viewer: MutableRefObject<HTMLVertexViewerElement | null>;
+  readonly ref: MutableRefObject<HTMLVertexViewerElement | null>;
   readonly onSceneReady: () => void;
-  readonly viewerState: ViewerState;
+  readonly state: ViewerState;
 }
 
 interface ViewerState {
-  readonly sceneViewId?: string;
   readonly isReady: boolean;
+  readonly isRefReady: boolean;
 }
 
 export function useViewer(): ViewerContext {
   const ref = useRef<HTMLVertexViewerElement>(null);
-  const [state, setState] = useState<ViewerState>({ isReady: false });
+  const [state, setState] = useState<ViewerState>({
+    isReady: false,
+    isRefReady: false,
+  });
 
-  const onSceneReady = useCallback(async () => {
-    const scene = await ref.current?.scene();
-    setState({ ...state, sceneViewId: scene?.sceneViewId });
-  }, [state]);
+  const onSceneReady = useCallback(() => {
+    setState({ ...state, isRefReady: ref.current != null });
+  }, [ref.current]);
 
   useEffect(() => {
-    async function setup(): Promise<void> {
-      await defineCustomElements();
-      setState({ ...(state ?? {}), isReady: true });
+    if (!state.isReady) {
+      defineCustomElements().then(() => setState({ ...state, isReady: true }));
     }
-
-    if (!state.isReady) setup();
   }, [state]);
 
-  return { viewer: ref, viewerState: state, onSceneReady };
+  return { ref, state, onSceneReady };
 }

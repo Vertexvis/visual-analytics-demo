@@ -1,21 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { StreamCreds } from '../lib/storage';
+import { StreamCredentials as StreamCredentials } from '../lib/storage';
 import { Dialog } from './Dialog';
 
 interface Props {
-  readonly creds: StreamCreds;
+  readonly creds: StreamCredentials;
   readonly open: boolean;
   readonly onClose: VoidFunction;
-  readonly onConfirm: (creds: StreamCreds) => void;
+  readonly onConfirm: (creds: StreamCredentials) => void;
 }
 
-export function StreamCredsDialog({
+export function OpenButton({ onClick }: { onClick: () => void }): JSX.Element {
+  return (
+    <div className="ml-4 mr-auto">
+      <button className="btn btn-primary text-sm" onClick={onClick}>
+        Open Scene
+      </button>
+    </div>
+  );
+}
+
+export function OpenDialog({
   creds,
   open,
   onClose,
   onConfirm,
 }: Props): JSX.Element {
-  const [inputCreds, setInputCreds] = useState<StreamCreds>(creds);
+  const [inputCreds, setInputCreds] = useState<StreamCredentials>(creds);
   const handleClose = (): void => onClose();
 
   useEffect(() => {
@@ -77,4 +87,10 @@ export function StreamCredsDialog({
       </div>
     </Dialog>
   );
+}
+
+export function encode(cs: StreamCredentials): string {
+  return `/?clientId=${encodeURIComponent(
+    cs.clientId
+  )}&streamKey=${encodeURIComponent(cs.streamKey)}`;
 }

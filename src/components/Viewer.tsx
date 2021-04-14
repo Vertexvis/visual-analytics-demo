@@ -7,10 +7,10 @@ import React, {
   MutableRefObject,
   RefAttributes,
 } from 'react';
-import { StreamCreds } from '../lib/storage';
+import { StreamCredentials } from '../lib/storage';
 
 export interface ViewerProps extends ViewerJSX.VertexViewer {
-  readonly creds: StreamCreds;
+  readonly credentials: StreamCredentials;
   readonly configEnv: Environment;
   readonly viewer: MutableRefObject<HTMLVertexViewerElement | null>;
 }
@@ -21,16 +21,23 @@ export type ViewerComponentType = ComponentType<
 
 export type HOCViewerProps = RefAttributes<HTMLVertexViewerElement>;
 
-export function Viewer({ creds, viewer, ...props }: ViewerProps): JSX.Element {
+function UnwrappedViewer({
+  credentials,
+  viewer,
+  ...props
+}: ViewerProps): JSX.Element {
   return (
     <VertexViewer
-      ref={viewer}
       className="w-full h-full"
-      src={`urn:vertexvis:stream-key:${creds.streamKey}`}
+      clientId={credentials.clientId}
+      ref={viewer}
+      src={`urn:vertexvis:stream-key:${credentials.streamKey}`}
       {...props}
     />
   );
 }
+
+export const Viewer = onTap(UnwrappedViewer);
 
 export interface OnSelectProps extends HOCViewerProps {
   readonly onSelect: (hit?: vertexvis.protobuf.stream.IHit) => Promise<void>;

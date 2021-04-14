@@ -1,4 +1,4 @@
-import { ColorMaterial, Scene } from '@vertexvis/viewer';
+import { ColorMaterial, Components } from '@vertexvis/viewer';
 import { arrayChunked } from '@vertexvis/vertex-api-client';
 import { BIData } from './business-intelligence';
 import { SelectColor } from './colors';
@@ -6,13 +6,23 @@ import { vertexvis } from '@vertexvis/frame-streaming-protos';
 
 const ChunkSize = 200;
 
+export interface Req {
+  readonly viewer: Components.VertexViewer | null;
+}
+
+interface SelectByHitReq extends Req {
+  readonly hit?: vertexvis.protobuf.stream.IHit;
+}
+
 export async function applyBIData({
   biData,
-  scene,
-}: {
+  viewer,
+}: Req & {
   readonly biData: BIData;
-  readonly scene?: Scene;
 }): Promise<void> {
+  if (viewer == null) return;
+
+  const scene = await viewer.scene();
   if (scene == null) return;
 
   // Clear all overrides and return on empty items
@@ -59,11 +69,11 @@ export async function applyBIData({
 
 export async function selectByHit({
   hit,
-  scene,
-}: {
-  readonly hit?: vertexvis.protobuf.stream.IHit;
-  readonly scene?: Scene;
-}): Promise<void> {
+  viewer,
+}: SelectByHitReq): Promise<void> {
+  if (viewer == null) return;
+
+  const scene = await viewer.scene();
   if (scene == null) return;
 
   const id = hit?.itemId?.hex;
@@ -86,13 +96,15 @@ export async function applyOrClearBySuppliedId({
   apply,
   color,
   ids,
-  scene,
-}: {
+  viewer,
+}: Req & {
   readonly apply: boolean;
   readonly color: string;
   readonly ids: string[];
-  readonly scene?: Scene;
 }): Promise<void> {
+  if (viewer == null) return;
+
+  const scene = await viewer.scene();
   if (scene == null) return;
 
   await scene
@@ -107,11 +119,10 @@ export async function applyOrClearBySuppliedId({
     .execute();
 }
 
-export async function clearAll({
-  scene,
-}: {
-  readonly scene?: Scene;
-}): Promise<void> {
+export async function clearAll({ viewer }: Req): Promise<void> {
+  if (viewer == null) return;
+
+  const scene = await viewer.scene();
   if (scene == null) return;
 
   await scene

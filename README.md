@@ -53,10 +53,10 @@ colors.csv            // Color each scene item the corresponding color.
 
 1. Clone repository, `git clone git@github.com:Vertexvis/business-intelligence-demo.git`
 1. Copy `.env.local.template` to `.env.local` and optionally edit values
-1. Run `docker-compose up`
+1. Run `docker-compose --file ./docker-compose.yml up`
 1. Browse to http://localhost:3000
 
-If you pull down changes, you'll need to run `docker-compose build` to build them and then `docker-compose up` again.
+If you pull down changes, you'll need to run `docker-compose --file ./docker-compose.yml build` to build them and then `docker-compose --file ./docker-compose.yml up` again.
 
 ## Local development
 

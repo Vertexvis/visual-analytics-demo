@@ -1,19 +1,19 @@
 import { Env } from './env';
 
-export interface StreamCreds {
+export interface StreamCredentials {
   clientId: string;
   streamKey: string;
 }
 
 const CredsKey = 'creds';
 
-export function getStoredCreds(): StreamCreds {
+export function getStoredCreds(): StreamCredentials {
   const val = getItem(CredsKey);
   const fallback = { clientId: '', streamKey: '' };
   return val ? JSON.parse(val) : fallback ?? fallback;
 }
 
-export function setStoredCreds(creds: StreamCreds): void {
+export function setStoredCreds(creds: StreamCredentials): void {
   setItem(CredsKey, JSON.stringify(creds));
 }
 
