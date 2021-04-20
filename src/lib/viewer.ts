@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-export interface ViewerContext {
+interface Viewer {
   readonly ref: MutableRefObject<HTMLVertexViewerElement | null>;
   readonly onSceneReady: () => void;
   readonly state: ViewerState;
@@ -18,7 +18,7 @@ interface ViewerState {
   readonly isRefReady: boolean;
 }
 
-export function useViewer(): ViewerContext {
+export function useViewer(): Viewer {
   const ref = useRef<HTMLVertexViewerElement>(null);
   const [state, setState] = useState<ViewerState>({
     isReady: false,

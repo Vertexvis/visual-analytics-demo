@@ -1,34 +1,39 @@
-import { vertexvis } from '@vertexvis/frame-streaming-protos';
-import { VertexViewer, JSX as ViewerJSX } from '@vertexvis/viewer-react';
-import { Environment } from '@vertexvis/viewer/dist/types/config/environment';
-import React, {
-  ComponentType,
-  FunctionComponent,
-  MutableRefObject,
-  RefAttributes,
-} from 'react';
-import { StreamCredentials } from '../lib/storage';
+import { makeStyles } from "@material-ui/core/styles";
+import { vertexvis } from "@vertexvis/frame-streaming-protos";
+import { VertexViewer, JSX as ViewerJSX } from "@vertexvis/viewer-react";
+import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
+import React from "react";
+import { StreamCredentials } from "../lib/storage";
 
 export interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly credentials: StreamCredentials;
   readonly configEnv: Environment;
-  readonly viewer: MutableRefObject<HTMLVertexViewerElement | null>;
+  readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
 }
 
-export type ViewerComponentType = ComponentType<
-  ViewerProps & RefAttributes<HTMLVertexViewerElement>
+export type ViewerComponentType = React.ComponentType<
+  ViewerProps & React.RefAttributes<HTMLVertexViewerElement>
 >;
 
-export type HOCViewerProps = RefAttributes<HTMLVertexViewerElement>;
+export type HOCViewerProps = React.RefAttributes<HTMLVertexViewerElement>;
+
+const useStyles = makeStyles(() => ({
+  root: {
+    height: "100%",
+    width: "100%",
+  },
+}));
 
 function UnwrappedViewer({
   credentials,
   viewer,
   ...props
 }: ViewerProps): JSX.Element {
+  const { root } = useStyles();
+
   return (
     <VertexViewer
-      className="w-full h-full"
+      className={root}
       clientId={credentials.clientId}
       ref={viewer}
       src={`urn:vertexvis:stream-key:${credentials.streamKey}`}
@@ -45,8 +50,8 @@ export interface OnSelectProps extends HOCViewerProps {
 
 export function onTap<P extends ViewerProps>(
   WrappedViewer: ViewerComponentType
-): FunctionComponent<P & OnSelectProps> {
-  return function Component({ viewer, onSelect, ...props }) {
+): React.FunctionComponent<P & OnSelectProps> {
+  return function Component({ viewer, onSelect, ...props }: P & OnSelectProps) {
     return (
       <WrappedViewer
         viewer={viewer}

@@ -6,7 +6,7 @@ import { vertexvis } from '@vertexvis/frame-streaming-protos';
 
 const ChunkSize = 200;
 
-export interface Req {
+interface Req {
   readonly viewer: Components.VertexViewer | null;
 }
 

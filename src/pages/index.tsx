@@ -1,58 +1,66 @@
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { Header } from '../components/Header';
-import { Props as LayoutProps } from '../components/Layout';
-import { encode, OpenButton, OpenDialog } from '../components/OpenSceneDialog';
-import { RightSidebar } from '../components/RightSidebar';
-import { Tree } from '../components/Tree';
-import { Viewer } from '../components/Viewer';
-import { VertexLogo } from '../components/VertexLogo';
+import Box from "@material-ui/core/Box";
+// import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import React from "react";
+import { useDropzone } from "react-dropzone";
+import { Layout } from "../components/Layout";
+import { encodeCreds, OpenButton, OpenDialog } from "../components/OpenScene";
+import { RightDrawer } from "../components/RightDrawer";
+import { LeftDrawer } from "../components/LeftDrawer";
+import { Viewer } from "../components/Viewer";
 import {
   createBIData,
   DefaultBIData,
   BIData,
-} from '../lib/business-intelligence';
-import { DefaultClientId, DefaultStreamKey, Env } from '../lib/env';
-import { handleCsvUpload } from '../lib/file-upload';
+} from "../lib/business-intelligence";
+import { DefaultClientId, DefaultStreamKey, Env } from "../lib/env";
+import { useKeyListener } from "../lib/key-listener";
+import { handleCsvUpload } from "../lib/file-upload";
 import {
   applyBIData,
   applyOrClearBySuppliedId,
   clearAll,
   selectByHit,
-} from '../lib/scene-items';
+} from "../lib/scene-items";
 import {
   getStoredCreds,
   setStoredCreds,
   StreamCredentials,
-} from '../lib/storage';
-import { useViewer } from '../lib/viewer';
+} from "../lib/storage";
+import { useViewer } from "../lib/viewer";
 
-const Layout = dynamic<LayoutProps>(
-  () => import('../components/Layout').then((m) => m.Layout),
-  { ssr: false }
-);
+// const Layout = dynamic<LayoutProps>(
+//   () => import("../components/Layout").then((m) => m.Layout),
+//   { ssr: false }
+// );
 
 export default function Home(): JSX.Element {
-  const viewer = useViewer();
   const router = useRouter();
   const { clientId: queryId, streamKey: queryKey } = router.query;
   const stored = getStoredCreds();
-  const [credentials, setCredentials] = useState<StreamCredentials>({
+  const [credentials, setCredentials] = React.useState<StreamCredentials>({
     clientId: queryId?.toString() || stored.clientId || DefaultClientId,
     streamKey: queryKey?.toString() || stored.streamKey || DefaultStreamKey,
   });
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [biData, setBIData] = useState<BIData>(DefaultBIData);
 
-  useEffect(() => {
-    router.push(encode(credentials));
+  React.useEffect(() => {
+    router.push(encodeCreds(credentials));
     setStoredCreds(credentials);
   }, [credentials]);
 
+  const keys = useKeyListener();
+  React.useEffect(() => {
+    if (!dialogOpen && keys.o) setDialogOpen(true);
+  }, [keys]);
+
+  const viewer = useViewer();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [biData, setBIData] = React.useState<BIData>(DefaultBIData);
+  const ready =
+    credentials.clientId && credentials.streamKey && viewer.state.isReady;
+
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop: useCallback((acceptedFiles) => {
+    onDrop: React.useCallback((acceptedFiles) => {
       if (viewer.ref.current == null) return;
 
       handleCsvUpload(acceptedFiles[0]).then((data) => {
@@ -86,32 +94,19 @@ export default function Home(): JSX.Element {
     });
   }
 
-  return router.isReady ? (
-    <Layout title="Vertex Business Intelligence">
-      <div className="col-span-full">
-        <Header logo={<VertexLogo />}>
-          <OpenButton onClick={() => setDialogOpen(true)} />
-        </Header>
-      </div>
-      {dialogOpen && (
-        <OpenDialog
-          creds={credentials}
-          open={dialogOpen}
-          onClose={() => setDialogOpen(false)}
-          onConfirm={(cs) => {
-            setCredentials(cs);
-            setDialogOpen(false);
-          }}
-        />
-      )}
-      <div className="flex w-full row-start-2 row-span-full col-start-2 col-span-full">
-        <Tree
+  return (
+    <Layout
+      header={<OpenButton onClick={() => setDialogOpen(true)} />}
+      leftDrawer={
+        <LeftDrawer
           biData={biData}
           configEnv={Env}
           viewer={viewer.ref.current ?? undefined}
         />
-        {credentials.clientId && credentials.streamKey && viewer.state.isReady && (
-          <div className="w-0 flex-grow ml-auto relative" {...getRootProps()}>
+      }
+      main={
+        ready && (
+          <Box height="100%" width="100%" {...getRootProps()}>
             <input {...getInputProps()} />
             <Viewer
               configEnv={Env}
@@ -122,9 +117,11 @@ export default function Home(): JSX.Element {
                 await selectByHit({ hit: hit, viewer: viewer.ref.current })
               }
             />
-          </div>
-        )}
-        <RightSidebar
+          </Box>
+        )
+      }
+      rightDrawer={
+        <RightDrawer
           biData={biData}
           onCheck={onCheck}
           onReset={async () => {
@@ -132,9 +129,19 @@ export default function Home(): JSX.Element {
             await clearAll({ viewer: viewer.ref.current });
           }}
         />
-      </div>
+      }
+    >
+      {dialogOpen && (
+        <OpenDialog
+          credentials={credentials}
+          onClose={() => setDialogOpen(false)}
+          onConfirm={(cs) => {
+            setCredentials(cs);
+            setDialogOpen(false);
+          }}
+          open={dialogOpen}
+        />
+      )}
     </Layout>
-  ) : (
-    <></>
   );
 }
