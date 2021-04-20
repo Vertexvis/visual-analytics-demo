@@ -1,8 +1,9 @@
 import Box from "@material-ui/core/Box";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import { Layout } from "../components/Layout";
+import { Props as LayoutProps } from "../components/Layout";
 import { encodeCreds, OpenButton, OpenDialog } from "../components/OpenScene";
 import { RightDrawer } from "../components/RightDrawer";
 import { LeftDrawer } from "../components/LeftDrawer";
@@ -27,6 +28,11 @@ import {
   StreamCredentials,
 } from "../lib/storage";
 import { useViewer } from "../lib/viewer";
+
+const Layout = dynamic<LayoutProps>(
+  () => import("../components/Layout").then((m) => m.Layout),
+  { ssr: false }
+);
 
 export default function Home(): JSX.Element {
   const router = useRouter();

@@ -53,7 +53,9 @@ export function RightDrawer({ biData, onCheck, onReset }: Props): JSX.Element {
         </AccordionSummary>
         <Box mx={2} mb={1}>
           {biData.name ? (
-            <Typography variant="body2">{biData.name}</Typography>
+            <Box mb={1}>
+              <Typography variant="body2">{biData.name}</Typography>
+            </Box>
           ) : (
             <Typography variant="body2">
               No data. Drag and drop CSV onto model.
