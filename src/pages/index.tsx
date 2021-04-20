@@ -1,5 +1,4 @@
 import Box from "@material-ui/core/Box";
-// import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
 import { useDropzone } from "react-dropzone";
@@ -29,11 +28,6 @@ import {
 } from "../lib/storage";
 import { useViewer } from "../lib/viewer";
 
-// const Layout = dynamic<LayoutProps>(
-//   () => import("../components/Layout").then((m) => m.Layout),
-//   { ssr: false }
-// );
-
 export default function Home(): JSX.Element {
   const router = useRouter();
   const { clientId: queryId, streamKey: queryKey } = router.query;
@@ -56,8 +50,7 @@ export default function Home(): JSX.Element {
   const viewer = useViewer();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [biData, setBIData] = React.useState<BIData>(DefaultBIData);
-  const ready =
-    credentials.clientId && credentials.streamKey && viewer.state.isReady;
+  const ready = credentials.clientId && credentials.streamKey && viewer.isReady;
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: React.useCallback((acceptedFiles) => {

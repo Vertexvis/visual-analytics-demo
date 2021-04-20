@@ -51,16 +51,14 @@ export function RightDrawer({ biData, onCheck, onReset }: Props): JSX.Element {
             Business Intelligence
           </Typography>
         </AccordionSummary>
-        <Box mx={2}>
-          <Box mb={1}>
-            {biData.name ? (
-              <Typography variant="body2">{biData.name}</Typography>
-            ) : (
-              <Typography variant="body2">
-                No data. Drag and drop CSV onto model.
-              </Typography>
-            )}
-          </Box>
+        <Box mx={2} mb={1}>
+          {biData.name ? (
+            <Typography variant="body2">{biData.name}</Typography>
+          ) : (
+            <Typography variant="body2">
+              No data. Drag and drop CSV onto model.
+            </Typography>
+          )}
           {biData.isHeatMap && (
             <Box className={hm} height={"10rem"} mb={1} textAlign="center">
               <Typography variant="body2">{biData.min}</Typography>
@@ -110,11 +108,9 @@ export function RightDrawer({ biData, onCheck, onReset }: Props): JSX.Element {
             </Box>
           )}
           {biData.name && (
-            <Box mb={2}>
-              <Button onClick={onReset} variant="contained">
-                Reset Model
-              </Button>
-            </Box>
+            <Button onClick={onReset} variant="contained">
+              Reset Model
+            </Button>
           )}
         </Box>
       </Accordion>

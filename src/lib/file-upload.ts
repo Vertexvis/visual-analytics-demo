@@ -1,4 +1,4 @@
-import { parse } from 'papaparse';
+import { parse } from "papaparse";
 
 export interface FileItem {
   suppliedId: string;
@@ -26,14 +26,14 @@ export function handleCsvUpload(
 
     reader.onload = () => {
       const text = reader.result;
-      if (typeof text !== 'string') {
-        console.warn('Invalid CSV file');
+      if (typeof text !== "string") {
+        console.warn("Invalid CSV file");
         return resolve(DefaultFileData);
       }
 
       const csv = parse<FileItem>(text, { header: true });
       if (csv.errors?.length > 0) {
-        console.warn('Invalid CSV file', csv.errors);
+        console.warn("Invalid CSV file", csv.errors);
         return resolve(DefaultFileData);
       }
 

@@ -5,17 +5,17 @@ import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
 import React from "react";
 import { StreamCredentials } from "../lib/storage";
 
-export interface ViewerProps extends ViewerJSX.VertexViewer {
+interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly credentials: StreamCredentials;
   readonly configEnv: Environment;
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
 }
 
-export type ViewerComponentType = React.ComponentType<
+type ViewerComponentType = React.ComponentType<
   ViewerProps & React.RefAttributes<HTMLVertexViewerElement>
 >;
 
-export type HOCViewerProps = React.RefAttributes<HTMLVertexViewerElement>;
+type HOCViewerProps = React.RefAttributes<HTMLVertexViewerElement>;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -23,6 +23,8 @@ const useStyles = makeStyles(() => ({
     width: "100%",
   },
 }));
+
+export const Viewer = onTap(UnwrappedViewer);
 
 function UnwrappedViewer({
   credentials,
@@ -42,13 +44,11 @@ function UnwrappedViewer({
   );
 }
 
-export const Viewer = onTap(UnwrappedViewer);
-
-export interface OnSelectProps extends HOCViewerProps {
+interface OnSelectProps extends HOCViewerProps {
   readonly onSelect: (hit?: vertexvis.protobuf.stream.IHit) => Promise<void>;
 }
 
-export function onTap<P extends ViewerProps>(
+function onTap<P extends ViewerProps>(
   WrappedViewer: ViewerComponentType
 ): React.FunctionComponent<P & OnSelectProps> {
   return function Component({ viewer, onSelect, ...props }: P & OnSelectProps) {

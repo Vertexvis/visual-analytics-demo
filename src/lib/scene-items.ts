@@ -1,8 +1,8 @@
-import { ColorMaterial, Components } from '@vertexvis/viewer';
-import { arrayChunked } from '@vertexvis/vertex-api-client';
-import { BIData } from './business-intelligence';
-import { SelectColor } from './colors';
-import { vertexvis } from '@vertexvis/frame-streaming-protos';
+import { ColorMaterial, Components } from "@vertexvis/viewer";
+import { arrayChunked } from "@vertexvis/vertex-api-client";
+import { BIData } from "./business-intelligence";
+import { SelectColor } from "./colors";
+import { vertexvis } from "@vertexvis/frame-streaming-protos";
 
 const ChunkSize = 200;
 
@@ -79,7 +79,7 @@ export async function selectByHit({
   const id = hit?.itemId?.hex;
   const suppliedId = hit?.itemSuppliedId?.value;
   if (id) {
-    console.debug(`Selected ${id}${suppliedId ? `, ${suppliedId}` : ''}`);
+    console.debug(`Selected ${id}${suppliedId ? `, ${suppliedId}` : ""}`);
 
     await scene
       .items((op) => [

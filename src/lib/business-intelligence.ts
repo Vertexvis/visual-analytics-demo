@@ -1,16 +1,5 @@
-import { calcRedToGreenGradient, randomColor } from './colors';
-import { FileData, FileItem } from './file-upload';
-
-export interface BIItem {
-  color: string;
-  value: number | string;
-}
-
-export interface TableItem {
-  count: number;
-  color: string;
-  display: boolean;
-}
+import { calcRedToGreenGradient, randomColor } from "./colors";
+import { FileData, FileItem } from "./file-upload";
 
 export interface BIData {
   isHeatMap: boolean;
@@ -19,6 +8,17 @@ export interface BIData {
   max: number;
   name?: string;
   table: Map<string, TableItem>;
+}
+
+interface BIItem {
+  color: string;
+  value: number | string;
+}
+
+interface TableItem {
+  count: number;
+  color: string;
+  display: boolean;
 }
 
 enum DataType {
@@ -77,12 +77,12 @@ function handleHeatMapNumbers(items: FileItem[], name?: string): BIData {
   const hmnItems = items
     .filter((i) => i.heatMapNumber)
     .map((i) => {
-      const value = parseFloat(i.heatMapNumber ?? '');
+      const value = parseFloat(i.heatMapNumber ?? "");
       if (value < min) min = value;
       if (value > max) max = value;
       return {
         suppliedId: i.suppliedId,
-        value: parseFloat(i.heatMapNumber ?? ''),
+        value: parseFloat(i.heatMapNumber ?? ""),
       };
     })
     .filter((i) => !isNaN(i.value));
@@ -99,7 +99,7 @@ function handleHeatMapNumbers(items: FileItem[], name?: string): BIData {
 }
 
 function handleHeatMapDates(): BIData {
-  console.error('Not implemented');
+  console.error("Not implemented");
   return DefaultBIData;
 }
 
@@ -114,7 +114,7 @@ function handleTable(items: FileItem[], name?: string): BIData {
   items
     .filter((i) => i.tableValue)
     .forEach((i) => {
-      const value = i.tableValue ?? '';
+      const value = i.tableValue ?? "";
       const existing = table.get(value);
       const color = existing
         ? existing.color
@@ -140,7 +140,7 @@ function handleColors(items: FileItem[], name?: string): BIData {
   items
     .filter((i) => i.color)
     .forEach((i) => {
-      const color = i.color ?? '';
+      const color = i.color ?? "";
       biItems.set(i.suppliedId, { color, value: color });
     });
 
@@ -148,6 +148,6 @@ function handleColors(items: FileItem[], name?: string): BIData {
 }
 
 function handleUnknown(): BIData {
-  console.error('Invalid data');
+  console.error("Invalid data");
   return DefaultBIData;
 }

@@ -11,7 +11,7 @@ import React from "react";
 import { BIData } from "../lib/business-intelligence";
 import { LeftDrawerWidth } from "./Layout";
 
-export interface Props extends ViewerJSX.VertexSceneTree {
+interface Props extends ViewerJSX.VertexSceneTree {
   readonly biData: BIData;
   readonly configEnv: Environment;
   readonly viewer?: HTMLVertexViewerElement;
