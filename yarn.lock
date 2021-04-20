@@ -31,9 +31,9 @@
     regenerator-runtime "^0.13.4"
 
 "@babel/runtime@^7.3.1", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.7":
-  version "7.13.10"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.13.10.tgz#47d42a57b6095f4468da440388fdbad8bebf0d7d"
-  integrity sha512-4QPkjJq6Ns3V/RgpEahRk+AGfL0eO6RHHtTWoNNr5mO49G6B5+X6d6THgWEAvTrznU5xYpbAlVKRYcsCgh/Akw==
+  version "7.13.16"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.13.16.tgz#673e7b84c1f6287d96d483fa65cd3db792d53e22"
+  integrity sha512-7VsWJsI5USRhBLE/3of+VU2DDNWtYHQlq2IHu2iL15+Yx4qVqP8KllR6JMHQlTKWRyDk9Tw6unkqSusaHXt//A==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -425,28 +425,28 @@
   resolved "https://registry.yarnpkg.com/@vertexvis/frame-streaming-protos/-/frame-streaming-protos-0.5.4.tgz#8b3adb1d12058a3f11c4d9ddf8eb0ca3bb964a42"
   integrity sha512-HBdIjXa0w3btvi3y1uXbRN54zn0OdUkzgmFrQrZfJ5G7C8nULzVCL8jZ0VIykb93Zwo1Mas6+8kj0VNdjw1Nnw==
 
-"@vertexvis/geometry@^0.9.26-canary.5":
-  version "0.9.26-canary.5"
-  resolved "https://registry.yarnpkg.com/@vertexvis/geometry/-/geometry-0.9.26-canary.5.tgz#4741d61a1a35a012b4694f16d9453a83a243e096"
-  integrity sha512-It9Po1OTAPeI4Ymy4mCvVyJY8Hm6y7e/XC1/F15z1xsFfi5/Wz/OyyxfYo8af0PKOIsuHMuLAPDnZ4E5ZTOI4g==
+"@vertexvis/geometry@^0.9.26-canary.6":
+  version "0.9.26-canary.6"
+  resolved "https://registry.yarnpkg.com/@vertexvis/geometry/-/geometry-0.9.26-canary.6.tgz#4f462d041410dc9464a3702830e8d8ff6e8c89f8"
+  integrity sha512-vJgvVS+BPZ6eGk32KYlHo9A3VtUJKIO2blilLbQ0zxZDJxFJdJBCparvuJJH0b67erApzl3amd5e3rSMSfMBbw==
 
 "@vertexvis/scene-tree-protos@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@vertexvis/scene-tree-protos/-/scene-tree-protos-0.0.4.tgz#d32a56294acc44354f4d98dbdb5c8bc965e4481b"
   integrity sha512-0s7GhqEzbm7ZRPDeGKmA5wG+Zoq2m+f9dOTt5pKUcd1jIV+IkXkyi5ApjQdUspkzdAy1oGr9N4MbH7/qek0BVQ==
 
-"@vertexvis/stream-api@^0.9.26-canary.5":
-  version "0.9.26-canary.5"
-  resolved "https://registry.yarnpkg.com/@vertexvis/stream-api/-/stream-api-0.9.26-canary.5.tgz#c521238e8df577f30df9f11eab6d22650e4683b3"
-  integrity sha512-WlGViJsMq7ilB1a96c8cn+MVN7gtoxgcN6nbMLx1VtjS7c8bXwfbGLDx5fuDu/sGvVh5GH4PzkZqpJM+6uMRzw==
+"@vertexvis/stream-api@^0.9.26-canary.6":
+  version "0.9.26-canary.6"
+  resolved "https://registry.yarnpkg.com/@vertexvis/stream-api/-/stream-api-0.9.26-canary.6.tgz#51dcacd73302f33b580bf76e05a80f51b22a9901"
+  integrity sha512-f6jeUOJPlD6ZRhiJhu54lJtv9ytxNPz8hsUnsKVdizqCyVKequ/4oNP/cbidr7sFCSvn39OP7eHsT/n0CIrX/A==
   dependencies:
     "@vertexvis/frame-streaming-protos" "^0.5.1"
-    "@vertexvis/utils" "^0.9.26-canary.5"
+    "@vertexvis/utils" "^0.9.26-canary.6"
 
-"@vertexvis/utils@^0.9.26-canary.5":
-  version "0.9.26-canary.5"
-  resolved "https://registry.yarnpkg.com/@vertexvis/utils/-/utils-0.9.26-canary.5.tgz#60bd708b182a70ad5e7885b5f78bc9a6c053abdd"
-  integrity sha512-9ClFhLYsTLdBf+lCjjj9Mea/qGFijLS/PwSwvbU6eWwQvRzjLN/16ls9lqOf6VKFHOkbGEL3foRysyFBqjCyfA==
+"@vertexvis/utils@^0.9.26-canary.6":
+  version "0.9.26-canary.6"
+  resolved "https://registry.yarnpkg.com/@vertexvis/utils/-/utils-0.9.26-canary.6.tgz#660ffc602b7040d7239e8496a01682ee83ebffad"
+  integrity sha512-cNcF3vsFL/NGQgYlXtno8vRAspf21Comi3ICClfyTls6ydWZYqzfn+HGGfWCBsDRiohc+H+Bwb/G5RERIO9J0g==
   dependencies:
     "@types/uuid" "^3.4.3"
     is-plain-object "^3.0.0"
@@ -460,29 +460,28 @@
     axios "^0.21"
     p-limit "^3.1"
 
-"@vertexvis/viewer-react@^0.9.26-canary.5":
-  version "0.9.26-canary.5"
-  resolved "https://registry.yarnpkg.com/@vertexvis/viewer-react/-/viewer-react-0.9.26-canary.5.tgz#476a43b9939bbdc57bb9f0a91eb1129d6cfacb17"
-  integrity sha512-KxSjX4/M/pGj0VguqoeMk9I40FDrrJdZRhEYI1OIlzxsLi8yH9EN1y9ChLRufjMrOk3T8tWzcMdLtPIw6l0Trg==
+"@vertexvis/viewer-react@^0.9.26-canary.6":
+  version "0.9.26-canary.6"
+  resolved "https://registry.yarnpkg.com/@vertexvis/viewer-react/-/viewer-react-0.9.26-canary.6.tgz#a0545427638b6512d62ad1e8851ca5af52c60e9b"
+  integrity sha512-19de5wm80Zo6mxBki3v0cBtkPNxj8mtOx+Uij+RvEw9oIhHN+EMkA4N/Wea54OqalQ2YjREgk7KB3Agflggu8w==
   dependencies:
-    "@vertexvis/viewer" "^0.9.26-canary.5"
+    "@vertexvis/viewer" "^0.9.26-canary.6"
 
-"@vertexvis/viewer@^0.9.26-canary.5":
-  version "0.9.26-canary.5"
-  resolved "https://registry.yarnpkg.com/@vertexvis/viewer/-/viewer-0.9.26-canary.5.tgz#b04fb07e075bab3cf3756d18404d6b483fb705d9"
-  integrity sha512-Xv3yrctUnXu/7/PptTu1bx4zd4mIM1AicjMRRBqJSJyXWrxRfk0wCDuH+L67UAzdyUKk6QCiZ/mch3SLYhh6Eg==
+"@vertexvis/viewer@^0.9.26-canary.6":
+  version "0.9.26-canary.6"
+  resolved "https://registry.yarnpkg.com/@vertexvis/viewer/-/viewer-0.9.26-canary.6.tgz#49fe6637c9b9a4a3d58b194b904dcecefaa7822c"
+  integrity sha512-yXyKC2CUvATTt45a0R6mybnZL6L6oSxDEcCYKKY5SUXTW/02lBhhIAw8K4moxwveatoxSlVFuI5BQJSstEGbcQ==
   dependencies:
     "@improbable-eng/grpc-web" "^0.14.0"
     "@juggle/resize-observer" "^3.3.0"
     "@types/classnames" "2.2.11"
     "@vertexvis/frame-streaming-protos" "^0.5.2"
-    "@vertexvis/geometry" "^0.9.26-canary.5"
+    "@vertexvis/geometry" "^0.9.26-canary.6"
     "@vertexvis/scene-tree-protos" "^0.0.4"
-    "@vertexvis/stream-api" "^0.9.26-canary.5"
-    "@vertexvis/utils" "^0.9.26-canary.5"
+    "@vertexvis/stream-api" "^0.9.26-canary.6"
+    "@vertexvis/utils" "^0.9.26-canary.6"
     classnames "2.2.6"
     google-protobuf "^3.15.7"
-    jwt-decode "^3.1.2"
     protobufjs "^6.9.0"
     requestidlecallback-polyfill "^1.0.2"
     tslib "^2.1.0"
@@ -829,9 +828,9 @@ callsites@^3.0.0:
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
 caniuse-lite@^1.0.30001173, caniuse-lite@^1.0.30001179:
-  version "1.0.30001211"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001211.tgz#be40d528bb10272eba0037a88adc40054810f8e2"
-  integrity sha512-v3GXWKofIkN3PkSidLI5d1oqeKNsam9nQkqieoMhP87nxOY0RPDC8X2+jcv8pjV4dRozPLSoMqNii9sDViOlIg==
+  version "1.0.30001214"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001214.tgz#70f153c78223515c6d37a9fde6cd69250da9d872"
+  integrity sha512-O2/SCpuaU3eASWVaesQirZv1MSjUNOvmugaD8zNSJqw6Vv5SGwoOpA9LJs3pNPfM745nxqPvfZY3MQKY4AKHYg==
 
 chalk@2.4.2, chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
@@ -2007,11 +2006,6 @@ jss@10.6.0, jss@^10.5.1:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-jwt-decode@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
-  integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
-
 levn@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.4.1.tgz#ae4562c007473b932a6200d403268dd2fffc6ade"
@@ -3092,9 +3086,9 @@ symbol-observable@1.2.0:
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
 
 table@^6.0.4:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/table/-/table-6.3.0.tgz#b88c2be1ae7d318638cc064b2c0604baffec79f1"
-  integrity sha512-gM9kB7aNIuSagW89Fh+SdL49uhKnVSORxMcV72u/dfptFdqExInNn5M21wgq/Uf5UdJpsboFhNe/0SoNKjaxzg==
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/table/-/table-6.3.1.tgz#ff50199ca5de00bc695596d581f7550759889b35"
+  integrity sha512-kNpMVSN4fj9KY4G6tNDVIT59uaG8ZELGQ+cmFSqivmWkCXJLd00VfRmtyHa8X7AeM75PQ/6/TtEtWjTDs1jXJw==
   dependencies:
     ajv "^8.0.1"
     is-boolean-object "^1.1.0"
