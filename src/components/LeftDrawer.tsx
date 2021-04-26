@@ -11,7 +11,6 @@ import { updateVisibilityById } from "../lib/scene-items";
 interface Props extends ViewerJSX.VertexSceneTree {
   readonly biData: BIData;
   readonly configEnv: Environment;
-  readonly selected?: string;
 }
 
 type IconType = "shown" | "hidden";
@@ -23,22 +22,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export function LeftDrawer({
-  biData,
-  configEnv,
-  selected,
-  viewer,
-}: Props): JSX.Element {
+export function LeftDrawer({ biData, configEnv, viewer }: Props): JSX.Element {
   const ref = React.useRef<HTMLVertexSceneTreeElement>(null);
   const { paper } = useStyles();
 
   React.useEffect(() => {
     if (ref.current?.invalidateRows) ref.current?.invalidateRows();
   }, [biData]);
-
-  React.useEffect(() => {
-    if (selected) ref.current?.scrollToItem(selected);
-  }, [selected]);
 
   React.useEffect(() => {
     ref.current?.addEventListener("click", clickRow);

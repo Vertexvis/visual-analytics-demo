@@ -55,7 +55,6 @@ export default function Home(): JSX.Element {
 
   const viewer = useViewer();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<string | undefined>(undefined);
   const [biData, setBIData] = React.useState<BIData>(DefaultBIData);
   const ready =
     credentials.clientId && credentials.streamKey && viewer.state.ready;
@@ -102,7 +101,6 @@ export default function Home(): JSX.Element {
         <LeftDrawer
           biData={biData}
           configEnv={Env}
-          selected={selected}
           viewer={viewer.ref.current}
         />
       }
@@ -116,7 +114,6 @@ export default function Home(): JSX.Element {
               viewer={viewer.ref}
               onSceneReady={viewer.onSceneReady}
               onSelect={async (hit) => {
-                setSelected(hit?.itemId?.hex ?? undefined);
                 await selectByHit({ hit: hit, viewer: viewer.ref.current });
               }}
             />
