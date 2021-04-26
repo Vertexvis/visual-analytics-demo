@@ -6,7 +6,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import React from "react";
 
 const DenseToolbarHeight = 48;
-export const LeftDrawerWidth = 320;
+export const LeftDrawerWidth = 300;
 export const RightDrawerWidth = 320;
 
 export interface Props {

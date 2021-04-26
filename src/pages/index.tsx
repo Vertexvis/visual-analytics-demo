@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import { Props as LayoutProps } from "../components/Layout";
+import { LeftDrawer } from "../components/LeftDrawer";
 import { encodeCreds, OpenButton, OpenDialog } from "../components/OpenScene";
 import { RightDrawer } from "../components/RightDrawer";
-import { LeftDrawer } from "../components/LeftDrawer";
 import { Viewer } from "../components/Viewer";
 import {
   createBIData,
@@ -56,7 +56,8 @@ export default function Home(): JSX.Element {
   const viewer = useViewer();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [biData, setBIData] = React.useState<BIData>(DefaultBIData);
-  const ready = credentials.clientId && credentials.streamKey && viewer.isReady;
+  const ready =
+    credentials.clientId && credentials.streamKey && viewer.state.ready;
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: React.useCallback((acceptedFiles) => {
@@ -100,7 +101,7 @@ export default function Home(): JSX.Element {
         <LeftDrawer
           biData={biData}
           configEnv={Env}
-          viewer={viewer.ref.current ?? undefined}
+          viewer={viewer.ref.current}
         />
       }
       main={

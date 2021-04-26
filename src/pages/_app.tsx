@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import "@vertexvis/viewer/dist/viewer/viewer.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
@@ -14,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <React.Fragment>
       <Head>
-        <title>Vertex Starter</title>
+        <title>Vertex Business Intelligence</title>
         <link rel="icon" href="/favicon-512x512.png" />
         <meta
           name="viewport"

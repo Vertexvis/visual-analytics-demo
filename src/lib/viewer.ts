@@ -1,33 +1,28 @@
 import { defineCustomElements } from "@vertexvis/viewer-react";
-import {
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React from "react";
 
 interface Viewer {
-  readonly isReady: boolean;
-  readonly isRefReady: boolean;
   readonly onSceneReady: () => void;
-  readonly ref: MutableRefObject<HTMLVertexViewerElement | null>;
+  readonly ref: React.MutableRefObject<HTMLVertexViewerElement | null>;
+  readonly state: {
+    ready: boolean;
+    refReady: boolean;
+  };
 }
 
 export function useViewer(): Viewer {
-  const ref = useRef<HTMLVertexViewerElement>(null);
-  const [isReady, setIsReady] = useState(false);
-  const [isRefReady, setIsRefReady] = useState(false);
+  const ref = React.useRef<HTMLVertexViewerElement>(null);
+  const [state, setState] = React.useState({ ready: false, refReady: false });
 
-  const onSceneReady = useCallback(() => {
-    setIsRefReady(ref.current != null);
+  const onSceneReady = React.useCallback(() => {
+    setState({ ...state, refReady: ref.current != null });
   }, [ref.current]);
 
-  useEffect(() => {
-    if (!isReady) {
-      defineCustomElements().then(() => setIsReady(true));
+  React.useEffect(() => {
+    if (!state.ready) {
+      defineCustomElements().then(() => setState({ ...state, ready: true }));
     }
   }, []);
 
-  return { isReady, isRefReady, ref, onSceneReady };
+  return { ref, onSceneReady, state };
 }

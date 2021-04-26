@@ -51,7 +51,7 @@ export function RightDrawer({ biData, onCheck, onReset }: Props): JSX.Element {
             Business Intelligence
           </Typography>
         </AccordionSummary>
-        <Box mx={2} mb={1}>
+        <Box mx={2} mb={2}>
           {biData.name ? (
             <Box mb={1}>
               <Typography variant="body2">{biData.name}</Typography>
@@ -70,7 +70,7 @@ export function RightDrawer({ biData, onCheck, onReset }: Props): JSX.Element {
               <Typography variant="body2">{biData.max}</Typography>
             </Box>
           )}
-          {biData.table && biData.table.size > 0 && (
+          {biData.table.size > 0 && (
             <Box mb={2}>
               <TableContainer>
                 <Table padding="checkbox" size="small">
