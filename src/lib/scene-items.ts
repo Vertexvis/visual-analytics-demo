@@ -1,4 +1,4 @@
-import { ColorMaterial, Components } from "@vertexvis/viewer";
+import { ColorMaterial } from "@vertexvis/viewer";
 import { arrayChunked } from "@vertexvis/vertex-api-client";
 import { BIData } from "./business-intelligence";
 import { SelectColor } from "./colors";
@@ -7,7 +7,7 @@ import { vertexvis } from "@vertexvis/frame-streaming-protos";
 const ChunkSize = 200;
 
 interface Req {
-  readonly viewer: Components.VertexViewer | null;
+  readonly viewer?: HTMLVertexViewerElement | null;
 }
 
 interface SelectByHitReq extends Req {
@@ -90,6 +90,24 @@ export async function selectByHit({
   } else {
     await scene.items((op) => op.where((q) => q.all()).deselect()).execute();
   }
+}
+
+export async function updateVisibilityById({
+  id,
+  show,
+  viewer,
+}: Req & { id: string; show: boolean }): Promise<void> {
+  if (viewer == null) return;
+
+  const scene = await viewer.scene();
+  if (scene == null) return;
+
+  await scene
+    .items((op) => {
+      const w = op.where((q) => q.withItemId(id));
+      return [show ? w.show() : w.hide()];
+    })
+    .execute();
 }
 
 export async function applyOrClearBySuppliedId({

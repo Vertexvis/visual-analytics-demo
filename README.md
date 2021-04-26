@@ -2,8 +2,6 @@
 
 Overlay dynamic business intelligence data onto 3D models using the Vertex Platform. This allows anyone in your organization to quickly visualize data to find correlations and patterns easily missed in spreadsheets.
 
-![](business-intelligence-demo.gif)
-
 The `data` directory contains examples for our test model. At a minimum, each row has the supplied ID of a scene item. The other required columns depend on what you'd like to see. This demo supports three types of visualizations:
 
 1. Heat maps: Determine the range of boolean (0 or 1), integer, or floating-point numbers in the `heatMapNumber` column and then calculate where each scene item's value lies on a red-to-green gradient. For example,
