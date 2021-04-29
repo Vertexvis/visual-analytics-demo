@@ -31,15 +31,15 @@ export function LeftDrawer({ biData, configEnv, viewer }: Props): JSX.Element {
   }, [biData]);
 
   React.useEffect(() => {
-    ref.current?.addEventListener("click", clickRow);
-    return () => ref.current?.removeEventListener("click", clickRow);
+    const localRef = ref.current;
+    localRef?.addEventListener("click", clickRow);
+    return () => localRef?.removeEventListener("click", clickRow);
   });
 
   async function clickRow(e: MouseEvent | PointerEvent): Promise<void> {
     const row = await ref?.current?.getRowForEvent(e);
-    row != null && row.selected
-      ? ref.current?.deselectItem(row)
-      : ref.current?.selectItem(row);
+    if (row != null && row.selected) ref.current?.deselectItem(row);
+    else ref.current?.selectItem(row);
   }
 
   async function handleVisibility(row: Row): Promise<void> {

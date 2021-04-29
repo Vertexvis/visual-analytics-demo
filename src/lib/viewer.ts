@@ -16,13 +16,13 @@ export function useViewer(): Viewer {
 
   const onSceneReady = React.useCallback(() => {
     setState({ ...state, refReady: ref.current != null });
-  }, [ref.current]);
+  }, [state]);
 
   React.useEffect(() => {
     if (!state.ready) {
       defineCustomElements().then(() => setState({ ...state, ready: true }));
     }
-  }, []);
+  }, [state]);
 
   return { ref, onSceneReady, state };
 }

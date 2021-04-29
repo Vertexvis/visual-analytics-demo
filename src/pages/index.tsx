@@ -3,9 +3,10 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
 import { useDropzone } from "react-dropzone";
+import { Header } from "../components/Header";
 import { Props as LayoutProps } from "../components/Layout";
 import { LeftDrawer } from "../components/LeftDrawer";
-import { encodeCreds, OpenButton, OpenDialog } from "../components/OpenScene";
+import { encodeCreds, OpenDialog } from "../components/OpenScene";
 import { RightDrawer } from "../components/RightDrawer";
 import { Viewer } from "../components/Viewer";
 import {
@@ -36,40 +37,51 @@ const Layout = dynamic<LayoutProps>(
 
 export default function Home(): JSX.Element {
   const router = useRouter();
-  const { clientId: queryId, streamKey: queryKey } = router.query;
-  const stored = getStoredCreds();
-  const [credentials, setCredentials] = React.useState<StreamCredentials>({
-    clientId: queryId?.toString() || stored.clientId || DefaultClientId,
-    streamKey: queryKey?.toString() || stored.streamKey || DefaultStreamKey,
-  });
+  const viewer = useViewer();
+  const [biData, setBIData] = React.useState<BIData>(DefaultBIData);
+  const [credentials, setCredentials] = React.useState<
+    StreamCredentials | undefined
+  >();
+
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   React.useEffect(() => {
+    const stored = getStoredCreds();
+    const { clientId: qId, streamKey: qKey } = router.query;
+    setCredentials({
+      clientId: head(qId) ?? stored?.clientId ?? DefaultClientId,
+      streamKey: head(qKey) ?? stored?.streamKey ?? DefaultStreamKey,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady]);
+
+  React.useEffect(() => {
+    if (!credentials) return;
+
     router.push(encodeCreds(credentials));
     setStoredCreds(credentials);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [credentials]);
 
   const keys = useKeyListener();
   React.useEffect(() => {
     if (!dialogOpen && keys.o) setDialogOpen(true);
-  }, [keys]);
-
-  const viewer = useViewer();
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [biData, setBIData] = React.useState<BIData>(DefaultBIData);
-  const ready =
-    credentials.clientId && credentials.streamKey && viewer.state.ready;
+  }, [dialogOpen, keys]);
 
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop: React.useCallback((acceptedFiles) => {
-      if (viewer.ref.current == null) return;
+    onDrop: React.useCallback(
+      (acceptedFiles) => {
+        if (viewer.ref.current == null) return;
 
-      handleCsvUpload(acceptedFiles[0]).then((data) => {
-        const bi = createBIData(data);
-        applyBIData({ biData: bi, viewer: viewer.ref.current }).then(() =>
-          setBIData(bi)
-        );
-      });
-    }, []),
+        handleCsvUpload(acceptedFiles[0]).then((data) => {
+          const bi = createBIData(data);
+          applyBIData({ biData: bi, viewer: viewer.ref.current }).then(() =>
+            setBIData(bi)
+          );
+        });
+      },
+      [viewer.ref]
+    ),
     noClick: true,
   });
 
@@ -96,7 +108,7 @@ export default function Home(): JSX.Element {
 
   return (
     <Layout
-      header={<OpenButton onClick={() => setDialogOpen(true)} />}
+      header={<Header onOpenSceneClick={() => setDialogOpen(true)} />}
       leftDrawer={
         <LeftDrawer
           biData={biData}
@@ -105,14 +117,17 @@ export default function Home(): JSX.Element {
         />
       }
       main={
-        ready && (
+        credentials &&
+        viewer.state.ready && (
           <Box height="100%" width="100%" {...getRootProps()}>
             <input {...getInputProps()} />
             <Viewer
               configEnv={Env}
               credentials={credentials}
               viewer={viewer.ref}
-              onSceneReady={viewer.onSceneReady}
+              onSceneReady={() => {
+                viewer.onSceneReady();
+              }}
               onSelect={async (hit) => {
                 await selectByHit({ hit: hit, viewer: viewer.ref.current });
               }}
@@ -131,7 +146,7 @@ export default function Home(): JSX.Element {
         />
       }
     >
-      {dialogOpen && (
+      {credentials && dialogOpen && (
         <OpenDialog
           credentials={credentials}
           onClose={() => setDialogOpen(false)}
@@ -144,4 +159,8 @@ export default function Home(): JSX.Element {
       )}
     </Layout>
   );
+}
+
+function head<T>(items?: T | T[]): T | undefined {
+  return items ? (Array.isArray(items) ? items[0] : items) : undefined;
 }

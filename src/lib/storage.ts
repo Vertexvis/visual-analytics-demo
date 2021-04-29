@@ -7,10 +7,9 @@ export interface StreamCredentials {
 
 const CredsKey = "credentials";
 
-export function getStoredCreds(): StreamCredentials {
+export function getStoredCreds(): StreamCredentials | undefined {
   const val = getItem(CredsKey);
-  const fallback = { clientId: "", streamKey: "" };
-  return val ? JSON.parse(val) : fallback ?? fallback;
+  return val ? JSON.parse(val) : undefined ?? undefined;
 }
 
 export function setStoredCreds(credentials: StreamCredentials): void {
