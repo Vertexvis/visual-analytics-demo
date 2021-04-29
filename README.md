@@ -20,7 +20,7 @@ The `data` directory contains examples for our test model. At a minimum, each ro
    ```csv
    suppliedId,tableValue,color
    a,ACME,#6366F1
-   b,T's Tools,#EF4444
+   b,Initech,#EF4444
    c,ACME,
    ```
 
@@ -29,7 +29,7 @@ The `data` directory contains examples for our test model. At a minimum, each ro
    |     | Value     | Count |
    | --- | --------- | ----- |
    | x   | ACME      | 2     |
-   | x   | T's Tools | 1     |
+   | x   | Initech | 1     |
 
    It then allows you to toggle each individually to see where they exist on the model.
 

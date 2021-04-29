@@ -42,7 +42,6 @@ export default function Home(): JSX.Element {
   const [credentials, setCredentials] = React.useState<
     StreamCredentials | undefined
   >();
-
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   React.useEffect(() => {
