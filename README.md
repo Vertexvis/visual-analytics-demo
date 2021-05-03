@@ -26,9 +26,9 @@ The `data` directory contains examples for our test model. At a minimum, each ro
 
    This will output this table in the UI and color the corresponding scene items as specified,
 
-   |     | Value     | Count |
-   | --- | --------- | ----- |
-   | x   | ACME      | 2     |
+   |     | Value   | Count |
+   | --- | ------- | ----- |
+   | x   | ACME    | 2     |
    | x   | Initech | 1     |
 
    It then allows you to toggle each individually to see where they exist on the model.

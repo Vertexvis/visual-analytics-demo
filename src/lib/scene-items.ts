@@ -92,24 +92,6 @@ export async function selectByHit({
   }
 }
 
-export async function updateVisibilityById({
-  id,
-  show,
-  viewer,
-}: Req & { id: string; show: boolean }): Promise<void> {
-  if (viewer == null) return;
-
-  const scene = await viewer.scene();
-  if (scene == null) return;
-
-  await scene
-    .items((op) => {
-      const w = op.where((q) => q.withItemId(id));
-      return [show ? w.show() : w.hide()];
-    })
-    .execute();
-}
-
 export async function applyOrClearBySuppliedId({
   apply,
   color,

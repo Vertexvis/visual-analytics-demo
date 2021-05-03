@@ -35,6 +35,8 @@ const Layout = dynamic<LayoutProps>(
   { ssr: false }
 );
 
+const ViewerId = "vertex-viewer-id";
+
 export default function Home(): JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
@@ -43,6 +45,8 @@ export default function Home(): JSX.Element {
     StreamCredentials | undefined
   >();
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [selected, setSelected] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
     const stored = getStoredCreds();
@@ -107,12 +111,21 @@ export default function Home(): JSX.Element {
 
   return (
     <Layout
-      header={<Header onOpenSceneClick={() => setDialogOpen(true)} />}
+      header={
+        <Header
+          onMenuClick={() => setDrawerOpen(!drawerOpen)}
+          onOpenSceneClick={() => setDialogOpen(true)}
+          open={drawerOpen}
+        />
+      }
       leftDrawer={
         <LeftDrawer
           biData={biData}
           configEnv={Env}
-          viewer={viewer.ref.current}
+          onClose={() => setDrawerOpen(false)}
+          open={drawerOpen}
+          selected={selected}
+          viewerId={ViewerId}
         />
       }
       main={
@@ -128,12 +141,15 @@ export default function Home(): JSX.Element {
                 viewer.onSceneReady();
               }}
               onSelect={async (hit) => {
+                setSelected(hit?.itemId?.hex ?? undefined);
                 await selectByHit({ hit: hit, viewer: viewer.ref.current });
               }}
+              viewerId={ViewerId}
             />
           </Box>
         )
       }
+      open={drawerOpen}
       rightDrawer={
         <RightDrawer
           biData={biData}
