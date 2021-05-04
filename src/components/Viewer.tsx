@@ -9,6 +9,7 @@ interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly credentials: StreamCredentials;
   readonly configEnv: Environment;
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
+  readonly viewerId: string;
 }
 
 type ViewerComponentType = React.ComponentType<
@@ -29,12 +30,14 @@ export const Viewer = onTap(UnwrappedViewer);
 function UnwrappedViewer({
   credentials,
   viewer,
+  viewerId,
   ...props
 }: ViewerProps): JSX.Element {
   const { root } = useStyles();
 
   return (
     <VertexViewer
+      id={viewerId}
       className={root}
       clientId={credentials.clientId}
       ref={viewer}
