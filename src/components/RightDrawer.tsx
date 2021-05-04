@@ -13,6 +13,7 @@ interface Props {
   biData: BIData;
   onCheck: (value: string, checked: boolean) => Promise<void>;
   onReset: () => Promise<void>;
+  sampleDataPath?: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -24,7 +25,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export function RightDrawer({ biData, onCheck, onReset }: Props): JSX.Element {
+export function RightDrawer({
+  biData,
+  onCheck,
+  onReset,
+  sampleDataPath,
+}: Props): JSX.Element {
   const { paper, title } = useStyles();
 
   return (
@@ -39,6 +45,7 @@ export function RightDrawer({ biData, onCheck, onReset }: Props): JSX.Element {
           biData={biData}
           onCheck={onCheck}
           onReset={onReset}
+          sampleDataPath={sampleDataPath}
         />
       </Accordion>
     </Drawer>

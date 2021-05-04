@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -16,6 +17,7 @@ interface Props {
   biData: BIData;
   onCheck: (value: string, checked: boolean) => Promise<void>;
   onReset: () => Promise<void>;
+  sampleDataPath?: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -32,6 +34,7 @@ export function BusinessIntelligence({
   biData,
   onCheck,
   onReset,
+  sampleDataPath,
 }: Props): JSX.Element {
   const mid = (biData.max - biData.min) / 2;
   const { hm } = useStyles();
@@ -42,9 +45,20 @@ export function BusinessIntelligence({
         <Box mb={1}>
           <Typography variant="body2">{biData.name}</Typography>
         </Box>
+      ) : sampleDataPath ? (
+        <>
+          <Typography style={{ marginBottom: 5 }} variant="body2">
+            <Link href={sampleDataPath}>Click here</Link> to download sample
+            data for this model.
+          </Typography>
+          <Typography variant="body2">
+            Once downloaded, unzip the file. Then, drag and drop the CSV files
+            onto the model.
+          </Typography>
+        </>
       ) : (
         <Typography variant="body2">
-          No data. Drag and drop CSV onto model.
+          No data. Drag and drop supplied ID-mapped CSV files onto the model.
         </Typography>
       )}
       {biData.isHeatMap && (
