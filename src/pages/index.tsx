@@ -14,7 +14,12 @@ import {
   DefaultBIData,
   BIData,
 } from "../lib/business-intelligence";
-import { DefaultClientId, DefaultStreamKey, Env } from "../lib/env";
+import {
+  DefaultClientId,
+  DefaultStreamKey,
+  Env,
+  SampleDataPaths,
+} from "../lib/env";
 import { useKeyListener } from "../lib/key-listener";
 import { handleCsvUpload } from "../lib/file-upload";
 import {
@@ -158,6 +163,9 @@ export default function Home(): JSX.Element {
             setBIData(DefaultBIData);
             await clearAll({ viewer: viewer.ref.current });
           }}
+          sampleDataPath={
+            credentials ? SampleDataPaths[credentials.streamKey] : undefined
+          }
         />
       }
     >

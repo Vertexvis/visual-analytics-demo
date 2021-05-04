@@ -8,3 +8,8 @@ export const DefaultStreamKey = "RA00uJtbA41VR9NmZvHnXSW4H8viv9AI5Vbx";
 
 export const Env =
   (process.env.NEXT_PUBLIC_VERTEX_ENV as Environment) || "platprod";
+
+export const SampleDataPaths: { [k: string]: string } = {
+  [DefaultStreamKey]: "/super-car-data.zip",
+  "U9cSWVb7fvS9k-NQcT28uZG6wtm6xmiG0ctU": "/vertex-valve-data.zip",
+};
