@@ -5,12 +5,12 @@ import Drawer from "@material-ui/core/Drawer";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { BIData } from "../lib/business-intelligence";
-import { BusinessIntelligence } from "./BusinessIntelligence";
+import { AnalyticsData } from "../lib/analytics";
+import { Analytics } from "./Analytics";
 import { RightDrawerWidth } from "./Layout";
 
 interface Props {
-  biData: BIData;
+  analyticsData: AnalyticsData;
   onCheck: (value: string, checked: boolean) => Promise<void>;
   onReset: () => Promise<void>;
   sampleDataPath?: string;
@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export function RightDrawer({
-  biData,
+  analyticsData,
   onCheck,
   onReset,
   sampleDataPath,
@@ -38,11 +38,11 @@ export function RightDrawer({
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={title} variant="body2">
-            Business Intelligence
+            Analytics
           </Typography>
         </AccordionSummary>
-        <BusinessIntelligence
-          biData={biData}
+        <Analytics
+          analyticsData={analyticsData}
           onCheck={onCheck}
           onReset={onReset}
           sampleDataPath={sampleDataPath}

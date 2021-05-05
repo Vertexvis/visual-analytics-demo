@@ -1,6 +1,6 @@
-# Vertex Business Intelligence Demo
+# Vertex 3D Visual Analytics Demo
 
-Overlay dynamic business intelligence data onto 3D models using the Vertex Platform. This allows anyone in your organization to quickly visualize data to find correlations and patterns easily missed in spreadsheets.
+Overlay dynamic analytics data onto 3D models using the Vertex Platform. This allows anyone in your organization to quickly visualize data to find correlations and patterns easily missed in spreadsheets.
 
 The `data` directory contains examples for our test model. At a minimum, each row has the supplied ID of a scene item. The other required columns depend on what you'd like to see. This demo supports three types of visualizations:
 
@@ -49,7 +49,7 @@ colors.csv            // Color each scene item the corresponding color.
 
 ## Run locally in Docker
 
-1. Clone repository, `git clone git@github.com:Vertexvis/business-intelligence-demo.git`
+1. Clone repository, `git clone git@github.com:Vertexvis/visual-analytics-demo.git`
 1. Copy `.env.local.template` to `.env.local` and optionally edit values
 1. Run `docker-compose --file ./docker-compose.yml up`
 1. Browse to http://localhost:3000
@@ -58,7 +58,7 @@ If you pull down changes, you'll need to run `docker-compose --file ./docker-com
 
 ## Local development
 
-1. Clone repository, `git clone git@github.com:Vertexvis/business-intelligence-demo.git`
+1. Clone repository, `git clone git@github.com:Vertexvis/visual-analytics-demo.git`
 1. Copy `.env.local.template` to `.env.local` and optionally edit values
 1. Install dependencies, `yarn install`
 1. Run `yarn dev` to start the local development server

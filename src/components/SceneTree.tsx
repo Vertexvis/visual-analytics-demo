@@ -2,21 +2,25 @@ import { VertexSceneTree } from "@vertexvis/viewer-react";
 import { Row } from "@vertexvis/viewer/dist/types/components/scene-tree/lib/row";
 import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
 import React from "react";
-import { BIData } from "../lib/business-intelligence";
+import { AnalyticsData } from "../lib/analytics";
 
 interface Props {
-  readonly biData: BIData;
+  readonly analyticsData: AnalyticsData;
   readonly configEnv: Environment;
   readonly selected?: string;
   readonly viewerId: string;
 }
 
-export function SceneTree({ biData, configEnv, viewerId }: Props): JSX.Element {
+export function SceneTree({
+  analyticsData,
+  configEnv,
+  viewerId,
+}: Props): JSX.Element {
   const ref = React.useRef<HTMLVertexSceneTreeElement>(null);
 
   React.useEffect(() => {
     if (ref.current?.invalidateRows) ref.current?.invalidateRows();
-  }, [biData]);
+  }, [analyticsData]);
 
   // React.useEffect(() => {
   //   if (selected) ref.current?.scrollToItem(selected);
@@ -27,7 +31,9 @@ export function SceneTree({ biData, configEnv, viewerId }: Props): JSX.Element {
       configEnv={configEnv}
       ref={ref}
       rowData={(row: Row) => {
-        const item = biData.items.get(row?.node?.suppliedId?.value ?? "");
+        const item = analyticsData.items.get(
+          row?.node?.suppliedId?.value ?? ""
+        );
         return item != null
           ? {
               style: `background-color: ${item.color}; border-radius: 0.125rem; flex: 1; height: 15px; margin-top: 2px; margin-right: 5px; width: 15px;`,

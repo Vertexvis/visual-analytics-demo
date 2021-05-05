@@ -50,7 +50,7 @@ export function Header({
         </Button>
       </div>
       <Link
-        href="https://github.com/Vertexvis/business-intelligence-demo"
+        href="https://github.com/Vertexvis/visual-analytics-demo"
         rel="noreferrer"
         style={{ alignSelf: "center" }}
         target="_blank"

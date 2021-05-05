@@ -11,10 +11,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import { BIData } from "../lib/business-intelligence";
+import { AnalyticsData } from "../lib/analytics";
 
 interface Props {
-  biData: BIData;
+  analyticsData: AnalyticsData;
   onCheck: (value: string, checked: boolean) => Promise<void>;
   onReset: () => Promise<void>;
   sampleDataPath?: string;
@@ -30,20 +30,20 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export function BusinessIntelligence({
-  biData,
+export function Analytics({
+  analyticsData,
   onCheck,
   onReset,
   sampleDataPath,
 }: Props): JSX.Element {
-  const mid = (biData.max - biData.min) / 2;
+  const mid = (analyticsData.max - analyticsData.min) / 2;
   const { hm } = useStyles();
 
   return (
     <Box mx={2} mb={2}>
-      {biData.name ? (
+      {analyticsData.name ? (
         <Box mb={1}>
-          <Typography variant="body2">{biData.name}</Typography>
+          <Typography variant="body2">{analyticsData.name}</Typography>
         </Box>
       ) : sampleDataPath ? (
         <>
@@ -61,16 +61,16 @@ export function BusinessIntelligence({
           No data. Drag and drop supplied ID-mapped CSV files onto the model.
         </Typography>
       )}
-      {biData.isHeatMap && (
+      {analyticsData.isHeatMap && (
         <Box className={hm} height={"10rem"} mb={1} textAlign="center">
-          <Typography variant="body2">{biData.min}</Typography>
+          <Typography variant="body2">{analyticsData.min}</Typography>
           <Typography variant="body2">
             {mid.toFixed(mid % 1 === 0 ? 0 : 2)}
           </Typography>
-          <Typography variant="body2">{biData.max}</Typography>
+          <Typography variant="body2">{analyticsData.max}</Typography>
         </Box>
       )}
-      {biData.table.size > 0 && (
+      {analyticsData.table.size > 0 && (
         <Box mb={2}>
           <TableContainer>
             <Table padding="checkbox" size="small">
@@ -83,7 +83,7 @@ export function BusinessIntelligence({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {[...biData.table.entries()].map(([k, v]) => (
+                {[...analyticsData.table.entries()].map(([k, v]) => (
                   <TableRow key={k}>
                     <TableCell>
                       <Checkbox
@@ -109,7 +109,7 @@ export function BusinessIntelligence({
           </TableContainer>
         </Box>
       )}
-      {biData.name && (
+      {analyticsData.name && (
         <Button onClick={onReset} variant="contained">
           Reset Model
         </Button>

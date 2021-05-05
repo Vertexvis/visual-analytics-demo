@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <React.Fragment>
       <Head>
-        <title>Vertex Business Intelligence</title>
+        <title>Vertex 3D Visual Analytics</title>
         <link rel="icon" href="/favicon-512x512.png" />
         <meta
           name="viewport"

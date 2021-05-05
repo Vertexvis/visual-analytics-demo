@@ -6,12 +6,12 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
 import clsx from "clsx";
 import React from "react";
-import { BIData } from "../lib/business-intelligence";
+import { AnalyticsData } from "../lib/analytics";
 import { LeftDrawerWidth } from "./Layout";
 import { SceneTree } from "./SceneTree";
 
 interface Props {
-  readonly biData: BIData;
+  readonly analyticsData: AnalyticsData;
   readonly configEnv: Environment;
   readonly onClose: () => void;
   readonly open: boolean;
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function LeftDrawer({
-  biData,
+  analyticsData,
   configEnv,
   onClose,
   open,
@@ -59,7 +59,7 @@ export function LeftDrawer({
       </div>
       <Divider />
       <SceneTree
-        biData={biData}
+        analyticsData={analyticsData}
         configEnv={configEnv}
         selected={selected}
         viewerId={viewerId}

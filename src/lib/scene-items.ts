@@ -1,6 +1,6 @@
 import { ColorMaterial } from "@vertexvis/viewer";
 import { arrayChunked } from "@vertexvis/api-client-node";
-import { BIData } from "./business-intelligence";
+import { AnalyticsData } from "./analytics";
 import { SelectColor } from "./colors";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
 
@@ -14,11 +14,11 @@ interface SelectByHitReq extends Req {
   readonly hit?: vertexvis.protobuf.stream.IHit;
 }
 
-export async function applyBIData({
-  biData,
+export async function applyAnalyticsData({
+  analyticsData,
   viewer,
 }: Req & {
-  readonly biData: BIData;
+  readonly analyticsData: AnalyticsData;
 }): Promise<void> {
   if (viewer == null) return;
 
@@ -26,7 +26,7 @@ export async function applyBIData({
   if (scene == null) return;
 
   // Clear all overrides and return on empty items
-  if (biData.items.size === 0) {
+  if (analyticsData.items.size === 0) {
     return await scene
       .items((op) => [op.where((q) => q.all()).clearMaterialOverrides()])
       ?.execute();
@@ -34,8 +34,8 @@ export async function applyBIData({
 
   // Group alterations by color to reduce size of req/res
   const colorGroups = new Map<string, string[]>();
-  [...biData.items.entries()].forEach(([itemId, bii]) => {
-    colorGroups.set(bii.color, [...(colorGroups.get(bii.color) ?? []), itemId]);
+  [...analyticsData.items.entries()].forEach(([itemId, ai]) => {
+    colorGroups.set(ai.color, [...(colorGroups.get(ai.color) ?? []), itemId]);
   });
 
   // Split into arrays of length `ChunkSize` to keep req/res sizes reasonable

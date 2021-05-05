@@ -10,10 +10,10 @@ import { encodeCreds, OpenDialog } from "../components/OpenScene";
 import { RightDrawer } from "../components/RightDrawer";
 import { Viewer } from "../components/Viewer";
 import {
-  createBIData,
-  DefaultBIData,
-  BIData,
-} from "../lib/business-intelligence";
+  createAnalyticsData,
+  DefaultAnalyticsData,
+  AnalyticsData,
+} from "../lib/analytics";
 import {
   DefaultClientId,
   DefaultStreamKey,
@@ -23,7 +23,7 @@ import {
 import { useKeyListener } from "../lib/key-listener";
 import { handleCsvUpload } from "../lib/file-upload";
 import {
-  applyBIData,
+  applyAnalyticsData,
   applyOrClearBySuppliedId,
   clearAll,
   selectByHit,
@@ -45,7 +45,9 @@ const ViewerId = "vertex-viewer-id";
 export default function Home(): JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
-  const [biData, setBIData] = React.useState<BIData>(DefaultBIData);
+  const [analyticsData, setAnalyticsData] = React.useState<AnalyticsData>(
+    DefaultAnalyticsData
+  );
   const [credentials, setCredentials] = React.useState<
     StreamCredentials | undefined
   >();
@@ -82,10 +84,11 @@ export default function Home(): JSX.Element {
         if (viewer.ref.current == null) return;
 
         handleCsvUpload(acceptedFiles[0]).then((data) => {
-          const bi = createBIData(data);
-          applyBIData({ biData: bi, viewer: viewer.ref.current }).then(() =>
-            setBIData(bi)
-          );
+          const ad = createAnalyticsData(data);
+          applyAnalyticsData({
+            analyticsData: ad,
+            viewer: viewer.ref.current,
+          }).then(() => setAnalyticsData(ad));
         });
       },
       [viewer.ref]
@@ -94,7 +97,7 @@ export default function Home(): JSX.Element {
   });
 
   async function onCheck(value: string, checked: boolean): Promise<void> {
-    const table = biData.table;
+    const table = analyticsData.table;
     if (table == null) return;
 
     const val = table.get(value);
@@ -103,11 +106,11 @@ export default function Home(): JSX.Element {
     val.display = checked;
     table.set(value, val);
 
-    setBIData({ ...biData, table });
+    setAnalyticsData({ ...analyticsData, table });
     await applyOrClearBySuppliedId({
       apply: checked,
       color: val.color,
-      ids: [...biData.items.entries()]
+      ids: [...analyticsData.items.entries()]
         .filter(([, v]) => v.value === value)
         .map(([k]) => k),
       viewer: viewer.ref.current,
@@ -125,7 +128,7 @@ export default function Home(): JSX.Element {
       }
       leftDrawer={
         <LeftDrawer
-          biData={biData}
+          analyticsData={analyticsData}
           configEnv={Env}
           onClose={() => setDrawerOpen(false)}
           open={drawerOpen}
@@ -157,10 +160,10 @@ export default function Home(): JSX.Element {
       open={drawerOpen}
       rightDrawer={
         <RightDrawer
-          biData={biData}
+          analyticsData={analyticsData}
           onCheck={onCheck}
           onReset={async () => {
-            setBIData(DefaultBIData);
+            setAnalyticsData(DefaultAnalyticsData);
             await clearAll({ viewer: viewer.ref.current });
           }}
           sampleDataPath={

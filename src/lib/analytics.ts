@@ -1,16 +1,16 @@
 import { calcRedToGreenGradient, randomColor } from "./colors";
 import { FileData, FileItem } from "./file-upload";
 
-export interface BIData {
+export interface AnalyticsData {
   isHeatMap: boolean;
-  items: Map<string, BIItem>;
+  items: Map<string, AnalyticsItem>;
   min: number;
   max: number;
   name?: string;
   table: Map<string, TableItem>;
 }
 
-interface BIItem {
+interface AnalyticsItem {
   color: string;
   value: number | string;
 }
@@ -29,7 +29,7 @@ enum DataType {
   Colors,
 }
 
-export const DefaultBIData = {
+export const DefaultAnalyticsData = {
   isHeatMap: false,
   items: new Map(),
   max: 100,
@@ -37,9 +37,9 @@ export const DefaultBIData = {
   table: new Map(),
 };
 
-export function createBIData(data: FileData): BIData {
+export function createAnalyticsData(data: FileData): AnalyticsData {
   if (data == null || data.items == null || data.items.length === 0) {
-    return DefaultBIData;
+    return DefaultAnalyticsData;
   }
 
   const type = getDataType(data.items[0]);
@@ -70,10 +70,10 @@ function getDataType(item: FileItem): DataType {
  * Finds the minimum and maximum values to calculate a range. Uses this range
  * to calculate the color of the part on a red to green gradient.
  */
-function handleHeatMapNumbers(items: FileItem[], name?: string): BIData {
+function handleHeatMapNumbers(items: FileItem[], name?: string): AnalyticsData {
   let min = Number.MAX_VALUE;
   let max = 0;
-  const biItems = new Map<string, BIItem>();
+  const analyticsItems = new Map<string, AnalyticsItem>();
   const hmnItems = items
     .filter((i) => i.heatMapNumber)
     .map((i) => {
@@ -89,18 +89,25 @@ function handleHeatMapNumbers(items: FileItem[], name?: string): BIData {
 
   const range = max - min;
   hmnItems.forEach((i) =>
-    biItems.set(i.suppliedId, {
+    analyticsItems.set(i.suppliedId, {
       color: calcRedToGreenGradient((i.value / range) * 100, true),
       value: i.value,
     })
   );
 
-  return { ...DefaultBIData, isHeatMap: true, items: biItems, max, min, name };
+  return {
+    ...DefaultAnalyticsData,
+    isHeatMap: true,
+    items: analyticsItems,
+    max,
+    min,
+    name,
+  };
 }
 
-function handleHeatMapDates(): BIData {
+function handleHeatMapDates(): AnalyticsData {
   console.error("Not implemented");
-  return DefaultBIData;
+  return DefaultAnalyticsData;
 }
 
 /**
@@ -108,8 +115,8 @@ function handleHeatMapDates(): BIData {
  * in a table. When first encountering a new value, if there is a color in the
  * color column, use it. Otherwise, pick a random value.
  */
-function handleTable(items: FileItem[], name?: string): BIData {
-  const biItems = new Map<string, BIItem>();
+function handleTable(items: FileItem[], name?: string): AnalyticsData {
+  const analyticsItems = new Map<string, AnalyticsItem>();
   const table = new Map<string, TableItem>();
   items
     .filter((i) => i.tableValue)
@@ -126,28 +133,28 @@ function handleTable(items: FileItem[], name?: string): BIData {
         color: color,
         display: true,
       });
-      biItems.set(i.suppliedId, { color, value });
+      analyticsItems.set(i.suppliedId, { color, value });
     });
 
-  return { ...DefaultBIData, items: biItems, name, table };
+  return { ...DefaultAnalyticsData, items: analyticsItems, name, table };
 }
 
 /**
  * Color each part based on the value in the color column.
  */
-function handleColors(items: FileItem[], name?: string): BIData {
-  const biItems = new Map<string, BIItem>();
+function handleColors(items: FileItem[], name?: string): AnalyticsData {
+  const analyticsItems = new Map<string, AnalyticsItem>();
   items
     .filter((i) => i.color)
     .forEach((i) => {
       const color = i.color ?? "";
-      biItems.set(i.suppliedId, { color, value: color });
+      analyticsItems.set(i.suppliedId, { color, value: color });
     });
 
-  return { ...DefaultBIData, items: biItems, name: name };
+  return { ...DefaultAnalyticsData, items: analyticsItems, name: name };
 }
 
-function handleUnknown(): BIData {
+function handleUnknown(): AnalyticsData {
   console.error("Invalid data");
-  return DefaultBIData;
+  return DefaultAnalyticsData;
 }
