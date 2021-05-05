@@ -415,6 +415,14 @@
     "@typescript-eslint/types" "4.22.0"
     eslint-visitor-keys "^2.0.0"
 
+"@vertexvis/api-client-node@^0.12":
+  version "0.12.2"
+  resolved "https://registry.yarnpkg.com/@vertexvis/api-client-node/-/api-client-node-0.12.2.tgz#012bf80557f68d7ad6b5dca53dd227b76961e004"
+  integrity sha512-2Ppizoh9jSx+0SKTkZulHVG4SEFeQhUwdx7o4vZ+/6JxCxJW+4xmYy5N/QnOfbg9Md+XoeQdoQHIqkE5FwGLPA==
+  dependencies:
+    axios "^0.21"
+    p-limit "^3.1"
+
 "@vertexvis/frame-streaming-protos@^0.5.4":
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/@vertexvis/frame-streaming-protos/-/frame-streaming-protos-0.5.4.tgz#8b3adb1d12058a3f11c4d9ddf8eb0ca3bb964a42"
@@ -446,14 +454,6 @@
     "@types/uuid" "^3.4.3"
     is-plain-object "^3.0.0"
     uuid "^3.3.2"
-
-"@vertexvis/vertex-api-client@^0.11":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@vertexvis/vertex-api-client/-/vertex-api-client-0.11.0.tgz#61654eb97d36878538f386089da4b2243982210f"
-  integrity sha512-+Vh4Dam/EuzMsLEdlF/SZ3uH5rg6aSNNxaIdZ8zZN+tCYRjPwpERCyZA3Aw3vAw92Na/QsG2usQzeWawEzxyPQ==
-  dependencies:
-    axios "^0.21"
-    p-limit "^3.1"
 
 "@vertexvis/viewer-react@^0.9.26-canary.12":
   version "0.9.26-canary.12"

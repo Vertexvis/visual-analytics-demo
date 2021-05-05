@@ -1,5 +1,5 @@
 import { ColorMaterial } from "@vertexvis/viewer";
-import { arrayChunked } from "@vertexvis/vertex-api-client";
+import { arrayChunked } from "@vertexvis/api-client-node";
 import { BIData } from "./business-intelligence";
 import { SelectColor } from "./colors";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
