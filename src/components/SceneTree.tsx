@@ -7,7 +7,6 @@ import { AnalyticsData } from "../lib/analytics";
 interface Props {
   readonly analyticsData: AnalyticsData;
   readonly configEnv: Environment;
-  readonly selected?: string;
   readonly viewerId: string;
 }
 
@@ -21,10 +20,6 @@ export function SceneTree({
   React.useEffect(() => {
     if (ref.current?.invalidateRows) ref.current?.invalidateRows();
   }, [analyticsData]);
-
-  // React.useEffect(() => {
-  //   if (selected) ref.current?.scrollToItem(selected);
-  // }, [selected]);
 
   return (
     <VertexSceneTree

@@ -15,7 +15,6 @@ interface Props {
   readonly configEnv: Environment;
   readonly onClose: () => void;
   readonly open: boolean;
-  readonly selected?: string;
   readonly viewerId: string;
 }
 
@@ -40,7 +39,6 @@ export function LeftDrawer({
   configEnv,
   onClose,
   open,
-  selected,
   viewerId,
 }: Props): JSX.Element {
   const { header, paper, paperShift } = useStyles();
@@ -61,7 +59,6 @@ export function LeftDrawer({
       <SceneTree
         analyticsData={analyticsData}
         configEnv={configEnv}
-        selected={selected}
         viewerId={viewerId}
       />
     </Drawer>

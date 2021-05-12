@@ -1,10 +1,9 @@
 import Box from "@material-ui/core/Box";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import { Header } from "../components/Header";
-import { Props as LayoutProps } from "../components/Layout";
+import { Layout } from "../components/Layout";
 import { LeftDrawer } from "../components/LeftDrawer";
 import { encodeCreds, OpenDialog } from "../components/OpenScene";
 import { RightDrawer } from "../components/RightDrawer";
@@ -31,11 +30,6 @@ import {
 } from "../lib/scene-items";
 import { useViewer } from "../lib/viewer";
 
-const Layout = dynamic<LayoutProps>(
-  () => import("../components/Layout").then((m) => m.Layout),
-  { ssr: false }
-);
-
 const ViewerId = "vertex-viewer-id";
 
 export default function Home(): JSX.Element {
@@ -47,7 +41,6 @@ export default function Home(): JSX.Element {
     React.useState<StreamCredentials | undefined>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
     if (!router.isReady) return;
@@ -108,7 +101,7 @@ export default function Home(): JSX.Element {
     });
   }
 
-  return router.isReady ? (
+  return router.isReady && credentials ? (
     <Layout
       header={
         <Header
@@ -123,12 +116,10 @@ export default function Home(): JSX.Element {
           configEnv={Env}
           onClose={() => setDrawerOpen(false)}
           open={drawerOpen}
-          selected={selected}
           viewerId={ViewerId}
         />
       }
       main={
-        credentials &&
         viewer.state.ready && (
           <Box height="100%" width="100%" {...getRootProps()}>
             <input {...getInputProps()} />
@@ -140,7 +131,6 @@ export default function Home(): JSX.Element {
                 viewer.onSceneReady();
               }}
               onSelect={async (hit) => {
-                setSelected(hit?.itemId?.hex ?? undefined);
                 await selectByHit({ hit: hit, viewer: viewer.ref.current });
               }}
               viewerId={ViewerId}
@@ -163,7 +153,7 @@ export default function Home(): JSX.Element {
         />
       }
     >
-      {credentials && dialogOpen && (
+      {dialogOpen && (
         <OpenDialog
           credentials={credentials}
           onClose={() => setDialogOpen(false)}
