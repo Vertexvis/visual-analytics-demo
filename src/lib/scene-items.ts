@@ -27,7 +27,7 @@ export async function applyAnalyticsData({
 
   // Clear all overrides and return on empty items
   if (analyticsData.items.size === 0) {
-    return await scene
+    return scene
       .items((op) => [op.where((q) => q.all()).clearMaterialOverrides()])
       ?.execute();
   }

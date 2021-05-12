@@ -4,7 +4,23 @@ Connect external data sources to your 3D digital twin and deliver powerful insig
 
 Load a Vertex sample scene and download the corresponding CSV files of test data. Simply drag and drop the CSV files onto the app, and watch as your view updates to reflect the values found in the test data.
 
-The `data` directory contains data for our test models. At a minimum, each row has the supplied ID of a scene item. You supply these IDs when uploading models. They're likely existing part and/or revision IDs from your PLM system.
+The `data` directory contains data for our test models. At a minimum, each row has the supplied ID of a scene item. You supply these IDs to Vertex. They're likely existing part and/or revision IDs from your PLM system.
+
+As an example, if your 3D data file contains unique metadata properties for each part instance, you can specify it while following our [Import data](https://developer.vertexvis.com/docs/guides/import-data) guide. When creating the JSON file in the **Importing data** step, include the `suppliedInstanceIdKey` parameter. It will store these supplied ID in Vertex's Parts Library and set them as the scene item supplied IDs on scene creation.
+
+```json title="vertex-valve.json"
+[
+  {
+    "indexMetadata": true,
+    "source": {
+      "fileName": "[YOUR_PATH_TO_3D_DATA_FILE_INCLUDING_FILE_EXTENSION]",
+      "suppliedPartId": "vertex-valve",
+      "suppliedRevisionId": "1"
+    },
+    "suppliedInstanceIdKey": "InstanceID"
+  }
+]
+```
 
 The other required columns in the CSV files depend on what you'd like to see. This demo supports three types of visualizations:
 
