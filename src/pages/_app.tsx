@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>Vertex 3D Visual Analytics</title>
         <link rel="icon" href="/favicon-512x512.png" />
@@ -26,6 +26,6 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
-    </React.Fragment>
+    </>
   );
 }

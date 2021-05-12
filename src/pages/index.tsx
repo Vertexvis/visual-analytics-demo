@@ -120,19 +120,16 @@ export default function Home(): JSX.Element {
         />
       }
       main={
-        viewer.state.ready && (
+        viewer.isReady && (
           <Box height="100%" width="100%" {...getRootProps()}>
             <input {...getInputProps()} />
             <Viewer
               configEnv={Env}
               credentials={credentials}
-              viewer={viewer.ref}
-              onSceneReady={() => {
-                viewer.onSceneReady();
-              }}
               onSelect={async (hit) => {
                 await selectByHit({ hit: hit, viewer: viewer.ref.current });
               }}
+              viewer={viewer.ref}
               viewerId={ViewerId}
             />
           </Box>
