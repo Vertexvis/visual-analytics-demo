@@ -15,10 +15,11 @@ import {
   AnalyticsData,
 } from "../lib/analytics";
 import {
-  DefaultClientId,
-  DefaultStreamKey,
+  DefaultCredentials,
   Env,
+  head,
   SampleDataPaths,
+  StreamCredentials,
 } from "../lib/env";
 import { useKeyListener } from "../lib/key-listener";
 import { handleCsvUpload } from "../lib/file-upload";
@@ -28,11 +29,6 @@ import {
   clearAll,
   selectByHit,
 } from "../lib/scene-items";
-import {
-  getStoredCreds,
-  setStoredCreds,
-  StreamCredentials,
-} from "../lib/storage";
 import { useViewer } from "../lib/viewer";
 
 const Layout = dynamic<LayoutProps>(
@@ -45,31 +41,26 @@ const ViewerId = "vertex-viewer-id";
 export default function Home(): JSX.Element {
   const router = useRouter();
   const viewer = useViewer();
-  const [analyticsData, setAnalyticsData] = React.useState<AnalyticsData>(
-    DefaultAnalyticsData
-  );
-  const [credentials, setCredentials] = React.useState<
-    StreamCredentials | undefined
-  >();
+  const [analyticsData, setAnalyticsData] =
+    React.useState<AnalyticsData>(DefaultAnalyticsData);
+  const [credentials, setCredentials] =
+    React.useState<StreamCredentials | undefined>();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
-    const stored = getStoredCreds();
-    const { clientId: qId, streamKey: qKey } = router.query;
+    if (!router.isReady) return;
+
     setCredentials({
-      clientId: head(qId) ?? stored?.clientId ?? DefaultClientId,
-      streamKey: head(qKey) ?? stored?.streamKey ?? DefaultStreamKey,
+      clientId: head(router.query.clientId) || DefaultCredentials.clientId,
+      streamKey: head(router.query.streamKey) || DefaultCredentials.streamKey,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
 
   React.useEffect(() => {
-    if (!credentials) return;
-
-    router.push(encodeCreds(credentials));
-    setStoredCreds(credentials);
+    if (credentials) router.push(encodeCreds(credentials));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [credentials]);
 
@@ -117,7 +108,7 @@ export default function Home(): JSX.Element {
     });
   }
 
-  return (
+  return router.isReady ? (
     <Layout
       header={
         <Header
@@ -175,10 +166,6 @@ export default function Home(): JSX.Element {
       {credentials && dialogOpen && (
         <OpenDialog
           credentials={credentials}
-          defaultCredentials={{
-            clientId: DefaultClientId,
-            streamKey: DefaultStreamKey,
-          }}
           onClose={() => setDialogOpen(false)}
           onConfirm={(cs) => {
             setCredentials(cs);
@@ -188,9 +175,7 @@ export default function Home(): JSX.Element {
         />
       )}
     </Layout>
+  ) : (
+    <></>
   );
-}
-
-function head<T>(items?: T | T[]): T | undefined {
-  return items ? (Array.isArray(items) ? items[0] : items) : undefined;
 }

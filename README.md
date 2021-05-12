@@ -1,10 +1,14 @@
 # Vertex 3D Visual Analytics Demo
 
-Overlay dynamic analytics data onto 3D models using the Vertex Platform. This allows anyone in your organization to quickly visualize data to find correlations and patterns easily missed in spreadsheets.
+Connect external data sources to your 3D digital twin and deliver powerful insights with ease.
 
-The `data` directory contains examples for our test model. At a minimum, each row has the supplied ID of a scene item. The other required columns depend on what you'd like to see. This demo supports three types of visualizations:
+Load a Vertex sample scene and download the corresponding CSV files of test data. Simply drag and drop the CSV files onto the app, and watch as your view updates to reflect the values found in the test data.
 
-1. Heat maps: Determine the range of boolean (0 or 1), integer, or floating-point numbers in the `heatMapNumber` column and then calculate where each scene item's value lies on a red-to-green gradient. For example,
+The `data` directory contains data for our test models. At a minimum, each row has the supplied ID of a scene item. You supply these IDs when uploading models. They're likely existing part and/or revision IDs from your PLM system.
+
+The other required columns in the CSV files depend on what you'd like to see. This demo supports three types of visualizations:
+
+1. Heat maps: Determine the range of boolean (0 or 1), integer, or floating-point numbers in the `heatMapNumber` column. The application then calculates where each scene item's value lies on a between the min and max values and assigns a red-to-green gradient to it. For example,
 
    ```csv
    suppliedId,heatMapNumber
@@ -15,7 +19,7 @@ The `data` directory contains examples for our test model. At a minimum, each ro
 
    The minimum is one and the maximum is eleven, making the range 10. It will color `c` green, `a` red, and `b` yellow since it lies in the middle of the distribution.
 
-1. Tables: Find unique occurrences the values in the `tableValue` column and display the counts in a table. When first encountering a new `tableValue`, if there is a color in the `color` column, use it. Otherwise, pick a random color. For example (notice you only have to specify color once per `tableValue`),
+1. Tables: The application finds unique occurrences of the values in the `tableValue` column and display the counts in a table. When first encountering a new `tableValue`, if there is a color in the `color` column, it uses it. Otherwise, it picks a random color. For example (notice you only have to specify the color once per `tableValue`),
 
    ```csv
    suppliedId,tableValue,color
@@ -24,7 +28,7 @@ The `data` directory contains examples for our test model. At a minimum, each ro
    c,ACME,
    ```
 
-   This will output this table in the UI and color the corresponding scene items as specified,
+   This will output the following table in the UI and color the corresponding scene items as specified,
 
    |     | Value   | Count |
    | --- | ------- | ----- |
@@ -33,18 +37,20 @@ The `data` directory contains examples for our test model. At a minimum, each ro
 
    It then allows you to toggle each individually to see where they exist on the model.
 
-1. Colors: Provide a value in the `color` column and it will color the corresponding scene item that color.
+1. Colors: Provide a value in the `color` column and the application colors the corresponding scene item appropriately.
 
 ## Example data
 
 ```text
-heat-maps/
-  costs.csv           // Visualize costs of scene items.
-  defects.csv         // Defects per scene-item. Could also be warranty claims, failure rates, etc.
-  missing-colors.csv  // Scene items that are missing colors are red.
-tables/
-  suppliers.csv       // Display a table of each scene item's supplier.
-colors.csv            // Color each scene item the corresponding color.
+data/
+  [model-name]/
+    heat-maps/
+      costs.csv           // Costs per scene item.
+      defects.csv         // Defects per scene item. Could also be warranty claims, failure rates, etc.
+      missing-colors.csv  // Scene items that are missing colors are show as red.
+    tables/
+      suppliers.csv       // Display table of each scene item's supplier.
+    colors.csv            // Color each scene item the corresponding color.
 ```
 
 ## Run locally in Docker

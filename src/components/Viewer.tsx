@@ -3,7 +3,7 @@ import { vertexvis } from "@vertexvis/frame-streaming-protos";
 import { VertexViewer, JSX as ViewerJSX } from "@vertexvis/viewer-react";
 import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
 import React from "react";
-import { StreamCredentials } from "../lib/storage";
+import { StreamCredentials } from "../lib/env";
 
 interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly credentials: StreamCredentials;
