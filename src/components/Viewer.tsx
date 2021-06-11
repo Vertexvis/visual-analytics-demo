@@ -1,13 +1,12 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
-import { VertexViewer, JSX as ViewerJSX } from "@vertexvis/viewer-react";
-import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
+import { JSX as ViewerJSX,VertexViewer } from "@vertexvis/viewer-react";
 import React from "react";
+
 import { StreamCredentials } from "../lib/env";
 
 interface ViewerProps extends ViewerJSX.VertexViewer {
   readonly credentials: StreamCredentials;
-  readonly configEnv: Environment;
   readonly viewer: React.MutableRefObject<HTMLVertexViewerElement | null>;
   readonly viewerId: string;
 }
@@ -37,9 +36,9 @@ function UnwrappedViewer({
 
   return (
     <VertexViewer
-      id={viewerId}
       className={root}
       clientId={credentials.clientId}
+      id={viewerId}
       ref={viewer}
       src={`urn:vertexvis:stream-key:${credentials.streamKey}`}
       {...props}

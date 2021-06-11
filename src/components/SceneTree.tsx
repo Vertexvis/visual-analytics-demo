@@ -1,7 +1,8 @@
-import { VertexSceneTree } from "@vertexvis/viewer-react";
 import { Row } from "@vertexvis/viewer/dist/types/components/scene-tree/lib/row";
 import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
+import { VertexSceneTree } from "@vertexvis/viewer-react";
 import React from "react";
+
 import { AnalyticsData } from "../lib/analytics";
 
 interface Props {

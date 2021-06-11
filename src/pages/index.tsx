@@ -2,6 +2,7 @@ import Box from "@material-ui/core/Box";
 import { useRouter } from "next/router";
 import React from "react";
 import { useDropzone } from "react-dropzone";
+
 import { Header } from "../components/Header";
 import { Layout } from "../components/Layout";
 import { LeftDrawer } from "../components/LeftDrawer";
@@ -9,9 +10,9 @@ import { encodeCreds, OpenDialog } from "../components/OpenScene";
 import { RightDrawer } from "../components/RightDrawer";
 import { Viewer } from "../components/Viewer";
 import {
+  AnalyticsData,
   createAnalyticsData,
   DefaultAnalyticsData,
-  AnalyticsData,
 } from "../lib/analytics";
 import {
   DefaultCredentials,
@@ -20,8 +21,8 @@ import {
   SampleDataPaths,
   StreamCredentials,
 } from "../lib/env";
-import { useKeyListener } from "../lib/key-listener";
 import { handleCsvUpload } from "../lib/file-upload";
+import { useKeyListener } from "../lib/key-listener";
 import {
   applyAnalyticsData,
   applyOrClearBySuppliedId,

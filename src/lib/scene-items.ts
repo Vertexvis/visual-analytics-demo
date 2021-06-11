@@ -1,8 +1,9 @@
-import { ColorMaterial } from "@vertexvis/viewer";
 import { arrayChunked } from "@vertexvis/api-client-node";
+import { vertexvis } from "@vertexvis/frame-streaming-protos";
+import { ColorMaterial } from "@vertexvis/viewer";
+
 import { AnalyticsData } from "./analytics";
 import { SelectColor } from "./colors";
-import { vertexvis } from "@vertexvis/frame-streaming-protos";
 
 const ChunkSize = 200;
 
