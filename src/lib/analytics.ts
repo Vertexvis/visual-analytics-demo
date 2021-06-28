@@ -1,5 +1,5 @@
 import { calcRedToGreenGradient, randomColor } from "./colors";
-import { FileData, FileItem } from "./file-upload";
+import { FileData, FileItem } from "./files";
 
 export interface AnalyticsData {
   isHeatMap: boolean;

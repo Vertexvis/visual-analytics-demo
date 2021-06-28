@@ -7,12 +7,14 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React from "react";
 
 import { AnalyticsData } from "../lib/analytics";
-import { Analytics } from "./Analytics";
+import { Analytics, CsvDataType } from "./Analytics";
 import { RightDrawerWidth } from "./Layout";
 
 interface Props {
   analyticsData: AnalyticsData;
+  dataSelected?: CsvDataType;
   onCheck: (value: string, checked: boolean) => Promise<void>;
+  onDataSelected: (data: CsvDataType) => Promise<void>;
   onReset: () => Promise<void>;
   sampleDataPath?: string;
 }
@@ -28,7 +30,9 @@ const useStyles = makeStyles(() => ({
 
 export function RightDrawer({
   analyticsData,
+  dataSelected,
   onCheck,
+  onDataSelected,
   onReset,
   sampleDataPath,
 }: Props): JSX.Element {
@@ -36,7 +40,7 @@ export function RightDrawer({
 
   return (
     <Drawer anchor="right" variant="permanent" classes={{ paper }}>
-      <Accordion>
+      <Accordion expanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={title} variant="body2">
             Analytics
@@ -44,7 +48,9 @@ export function RightDrawer({
         </AccordionSummary>
         <Analytics
           analyticsData={analyticsData}
+          dataSelected={dataSelected}
           onCheck={onCheck}
+          onDataSelected={onDataSelected}
           onReset={onReset}
           sampleDataPath={sampleDataPath}
         />

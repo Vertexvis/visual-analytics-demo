@@ -55,20 +55,6 @@ The other required columns in the CSV files depend on what you'd like to see. Th
 
 1. Colors: Provide a value in the `color` column and the application colors the corresponding scene item appropriately.
 
-## Example data
-
-```text
-data/
-  [model-name]/
-    heat-maps/
-      costs.csv           // Costs per scene item.
-      defects.csv         // Defects per scene item. Could also be warranty claims, failure rates, etc.
-      missing-colors.csv  // Scene items that are missing colors are show as red.
-    tables/
-      suppliers.csv       // Display table of each scene item's supplier.
-    colors.csv            // Color each scene item the corresponding color.
-```
-
 ## Run locally in Docker
 
 1. Clone repository, `git clone git@github.com:Vertexvis/visual-analytics-demo.git`
@@ -89,11 +75,20 @@ If you pull down changes, you'll need to run `docker-compose --file ./docker-com
 ## Project organization
 
 ```text
-public/       // Static assets
+data/                     // Sample data
+  [model-name]/
+    heat-maps/
+      costs.csv           // Costs per scene item.
+      defects.csv         // Defects per scene item. Could also be warranty claims, failure rates, etc.
+      missing-colors.csv  // Scene items that are missing colors are show as red.
+    tables/
+      suppliers.csv       // Display table of each scene item's supplier.
+    colors.csv            // Color each scene item the corresponding color.
+public/                   // Static assets
 src/
-  components/ // Components used in pages
-  lib/        // Shared libraries and utilities
-  pages/      // Pages served by NextJS
+  components/             // Components used in pages
+  lib/                    // Shared libraries and utilities
+  pages/                  // Pages served by NextJS
 ```
 
 ### Deployment

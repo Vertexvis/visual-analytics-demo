@@ -1,3 +1,4 @@
+import { delay } from "@vertexvis/api-client-node";
 import { Row } from "@vertexvis/viewer/dist/types/components/scene-tree/lib/row";
 import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
 import { VertexSceneTree } from "@vertexvis/viewer-react";
@@ -19,8 +20,37 @@ export function SceneTree({
   const ref = React.useRef<HTMLVertexSceneTreeElement>(null);
 
   React.useEffect(() => {
+    async function expandRoot() {
+      await delay(1500);
+      try {
+        if (ref.current?.expandItem) await ref.current?.expandItem(0);
+      } catch {
+        // Ignore
+      }
+    }
+
+    const effectRef = ref.current;
+    effectRef?.addEventListener("click", clickRow);
+    expandRoot();
+
+    return () => effectRef?.removeEventListener("click", clickRow);
+  }, [ref]);
+
+  React.useEffect(() => {
     if (ref.current?.invalidateRows) ref.current?.invalidateRows();
   }, [analyticsData]);
+
+  const clickRow = async (e: MouseEvent): Promise<void> => {
+    const row = await ref?.current?.getRowForEvent(e);
+    if (row?.node == null) return;
+
+    console.log(row);
+    console.log(
+      `Selected ${row.node.suppliedId?.value ?? row.node.id?.hex},${
+        row.node.name
+      }`
+    );
+  };
 
   return (
     <VertexSceneTree

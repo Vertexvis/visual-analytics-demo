@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useDropzone } from "react-dropzone";
 
+import { CsvData, CsvDataType } from "../components/Analytics";
 import { Header } from "../components/Header";
 import { Layout } from "../components/Layout";
 import { LeftDrawer } from "../components/LeftDrawer";
@@ -21,7 +22,7 @@ import {
   SampleDataPaths,
   StreamCredentials,
 } from "../lib/env";
-import { handleCsvUpload } from "../lib/file-upload";
+import { handleCsvUpload, parseCsv } from "../lib/files";
 import { useKeyListener } from "../lib/key-listener";
 import {
   applyAnalyticsData,
@@ -38,10 +39,14 @@ export default function Home(): JSX.Element {
   const viewer = useViewer();
   const [analyticsData, setAnalyticsData] =
     React.useState<AnalyticsData>(DefaultAnalyticsData);
-  const [credentials, setCredentials] =
-    React.useState<StreamCredentials | undefined>();
+  const [dataSelected, setDataSelected] = React.useState<
+    CsvDataType | undefined
+  >("defects");
+  const [credentials, setCredentials] = React.useState<
+    StreamCredentials | undefined
+  >();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(true);
 
   React.useEffect(() => {
     if (!router.isReady) return;
@@ -68,6 +73,7 @@ export default function Home(): JSX.Element {
       (acceptedFiles) => {
         if (viewer.ref.current == null) return;
 
+        setDataSelected(undefined);
         handleCsvUpload(acceptedFiles[0]).then((data) => {
           const ad = createAnalyticsData(data);
           applyAnalyticsData({
@@ -140,7 +146,17 @@ export default function Home(): JSX.Element {
       rightDrawer={
         <RightDrawer
           analyticsData={analyticsData}
+          dataSelected={dataSelected}
           onCheck={onCheck}
+          onDataSelected={async (d) => {
+            setDataSelected(d);
+            const ad = createAnalyticsData(parseCsv(d, CsvData[d]));
+            await applyAnalyticsData({
+              analyticsData: ad,
+              viewer: viewer.ref.current,
+            });
+            setAnalyticsData(ad);
+          }}
           onReset={async () => {
             setAnalyticsData(DefaultAnalyticsData);
             await clearAll({ viewer: viewer.ref.current });

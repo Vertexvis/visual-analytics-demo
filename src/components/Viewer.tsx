@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
-import { JSX as ViewerJSX,VertexViewer } from "@vertexvis/viewer-react";
+import { JSX as ViewerJSX, VertexViewer } from "@vertexvis/viewer-react";
 import React from "react";
 
 import { StreamCredentials } from "../lib/env";

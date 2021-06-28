@@ -31,18 +31,19 @@ export function handleCsvUpload(
         return resolve(DefaultFileData);
       }
 
-      const csv = parse<FileItem>(text, { header: true });
-      if (csv.errors?.length > 0) {
-        console.warn("Invalid CSV file", csv.errors);
-        return resolve(DefaultFileData);
-      }
-
-      resolve({
-        name: fileName.name,
-        items: csv.data,
-      });
+      resolve(parseCsv(fileName.name, text));
     };
 
     reader.readAsText(fileName);
   });
+}
+
+export function parseCsv(name: string, text: string): FileData {
+  console.log(name, text);
+  const csv = parse<FileItem>(text, { header: true });
+  if (csv.errors?.length > 0) {
+    console.warn("Invalid CSV file", csv.errors);
+    return DefaultFileData;
+  }
+  return { name, items: csv.data };
 }
