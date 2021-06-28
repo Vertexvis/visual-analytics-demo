@@ -41,7 +41,7 @@ export default function Home(): JSX.Element {
     React.useState<AnalyticsData>(DefaultAnalyticsData);
   const [dataSelected, setDataSelected] = React.useState<
     CsvDataType | undefined
-  >("defects");
+  >();
   const [credentials, setCredentials] = React.useState<
     StreamCredentials | undefined
   >();
