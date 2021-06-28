@@ -85,7 +85,7 @@ export function Analytics({
           to modify them yourself.
         </Typography>
         <Typography variant="body2" style={{ marginBottom: 10 }}>
-          After modification, simply drag and drop the CSV files onto the model,
+          After modification, simply drag and drop the CSV files onto the model
           and watch as your view updates to reflect the values found in the
           data.
         </Typography>
