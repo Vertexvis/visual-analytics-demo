@@ -95,6 +95,7 @@ export function Analytics({
               button
               key={k}
               onClick={() => onDataSelected(k as CsvDataType)}
+              data-test-id={`${k}.csv`}
               selected={dataSelected === k}
             >{`${k}.csv`}</ListItem>
           ))}
