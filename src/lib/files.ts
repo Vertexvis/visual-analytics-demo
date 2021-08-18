@@ -39,7 +39,6 @@ export function handleCsvUpload(
 }
 
 export function parseCsv(name: string, text: string): FileData {
-  console.log(name, text);
   const csv = parse<FileItem>(text, { header: true });
   if (csv.errors?.length > 0) {
     console.warn("Invalid CSV file", csv.errors);

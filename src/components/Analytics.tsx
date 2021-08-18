@@ -74,36 +74,40 @@ export function Analytics({
 
   return (
     <Box mx={2} mb={2}>
-      <Box mb={2}>
-        <Typography variant="body2" style={{ marginBottom: 10 }}>
-          The Vertex Visual Analytics demo shows how to connect external data
-          sources to your 3D digital twin, delivering powerful insights with
-          ease. Select sample datasets below or{" "}
-          <Link href={sampleDataPath}>
-            download the corresponding CSV files
-          </Link>{" "}
-          to modify them yourself.
-        </Typography>
-        <Typography variant="body2" style={{ marginBottom: 10 }}>
-          After modification, simply drag and drop the CSV files onto the model
-          and watch as your view updates to reflect the values found in the
-          data.
-        </Typography>
-        <List>
-          {Object.keys(CsvData).map((k) => (
-            <ListItem
-              button
-              key={k}
-              onClick={() => onDataSelected(k as CsvDataType)}
-              selected={dataSelected === k}
-            >{`${k}.csv`}</ListItem>
-          ))}
-        </List>
-      </Box>
-      {!sampleDataPath && (
-        <Typography variant="body2">
-          No data. Drag and drop supplied ID-mapped CSV files onto the model.
-        </Typography>
+      {sampleDataPath && (
+        <Box mb={2}>
+          <Typography variant="body2" style={{ marginBottom: 10 }}>
+            The Vertex Visual Analytics demo shows how to connect external data
+            sources to your 3D digital twin, delivering powerful insights with
+            ease. Select sample datasets below or{" "}
+            <Link href={sampleDataPath}>
+              download the corresponding CSV files
+            </Link>{" "}
+            to modify them yourself.
+          </Typography>
+          <Typography variant="body2" style={{ marginBottom: 10 }}>
+            After modification, simply drag and drop the CSV files onto the
+            model and watch as your view updates to reflect the values found in
+            the data.
+          </Typography>
+          <List>
+            {Object.keys(CsvData).map((k) => (
+              <ListItem
+                button
+                key={k}
+                onClick={() => onDataSelected(k as CsvDataType)}
+                selected={dataSelected === k}
+              >{`${k}.csv`}</ListItem>
+            ))}
+          </List>
+        </Box>
+      )}
+      {!sampleDataPath && !analyticsData.name && (
+        <Box mb={2}>
+          <Typography variant="body2">
+            No data. Drag and drop supplied ID-mapped CSV files onto the model.
+          </Typography>
+        </Box>
       )}
       {analyticsData.isHeatMap && (
         <Box className={hm} height={"10rem"} mb={2} textAlign="center">

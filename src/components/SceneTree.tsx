@@ -44,7 +44,6 @@ export function SceneTree({
     const row = await ref?.current?.getRowForEvent(e);
     if (row?.node == null) return;
 
-    console.log(row);
     console.log(
       `Selected ${row.node.suppliedId?.value ?? row.node.id?.hex},${
         row.node.name
