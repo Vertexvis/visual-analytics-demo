@@ -1,6 +1,6 @@
 import { delay } from "@vertexvis/api-client-node";
+import { Environment } from "@vertexvis/viewer";
 import { Row } from "@vertexvis/viewer/dist/types/components/scene-tree/lib/row";
-import { Environment } from "@vertexvis/viewer/dist/types/config/environment";
 import { VertexSceneTree } from "@vertexvis/viewer-react";
 import React from "react";
 
