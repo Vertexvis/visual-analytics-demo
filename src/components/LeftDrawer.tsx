@@ -1,10 +1,9 @@
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
-import IconButton from "@material-ui/core/IconButton";
-import { makeStyles } from "@material-ui/core/styles";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer, { drawerClasses } from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
 import { Environment } from "@vertexvis/viewer";
-import clsx from "clsx";
 import React from "react";
 
 import { AnalyticsData } from "../lib/analytics";
@@ -19,22 +18,6 @@ interface Props {
   readonly viewerId: string;
 }
 
-const useStyles = makeStyles((theme) => ({
-  header: {
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    justifyContent: "flex-end",
-  },
-  paper: {
-    position: "relative",
-    width: 0,
-  },
-  paperShift: {
-    width: LeftDrawerWidth,
-  },
-}));
-
 export function LeftDrawer({
   analyticsData,
   configEnv,
@@ -42,20 +25,29 @@ export function LeftDrawer({
   open,
   viewerId,
 }: Props): JSX.Element {
-  const { header, paper, paperShift } = useStyles();
-
   return (
     <Drawer
       anchor="left"
-      classes={{ paper: clsx(paper, { [paperShift]: open }) }}
       open={open}
       variant="persistent"
+      sx={{
+        [`& .${drawerClasses.paper}`]: { position: "relative", width: 0 },
+        [`& .${drawerClasses.paperAnchorLeft}`]: { width: LeftDrawerWidth },
+      }}
     >
-      <div className={header}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          px: 1,
+          py: 0.5,
+          justifyContent: "flex-end",
+        }}
+      >
         <IconButton onClick={onClose}>
           <ChevronLeftIcon />
         </IconButton>
-      </div>
+      </Box>
       <Divider />
       <SceneTree
         analyticsData={analyticsData}

@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core/styles";
+/* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
 import { JSX as ViewerJSX, VertexViewer } from "@vertexvis/viewer-react";
 import React from "react";
@@ -17,13 +17,6 @@ type ViewerComponentType = React.ComponentType<
 
 type HOCViewerProps = React.RefAttributes<HTMLVertexViewerElement>;
 
-const useStyles = makeStyles(() => ({
-  root: {
-    height: "100%",
-    width: "100%",
-  },
-}));
-
 export const Viewer = onTap(UnwrappedViewer);
 
 function UnwrappedViewer({
@@ -32,12 +25,10 @@ function UnwrappedViewer({
   viewerId,
   ...props
 }: ViewerProps): JSX.Element {
-  const { root } = useStyles();
-
   return (
     <VertexViewer
-      className={root}
       clientId={credentials.clientId}
+      css={{ height: "100%", width: "100%" }}
       id={viewerId}
       ref={viewer}
       src={`urn:vertexvis:stream-key:${credentials.streamKey}`}

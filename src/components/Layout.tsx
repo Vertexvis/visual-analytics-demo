@@ -1,103 +1,126 @@
-import AppBar from "@material-ui/core/AppBar";
-import Box from "@material-ui/core/Box";
-import Hidden from "@material-ui/core/Hidden";
-import { makeStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import clsx from "clsx";
+import { AppBar as MuiAppBar, Box, Toolbar } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import React from "react";
 
-const DenseToolbarHeight = 48;
-export const LeftDrawerWidth = 300;
+import { easeOutEntering, sharpLeaving } from "../lib/transitions";
+
+export const BottomDrawerHeight = 240;
+export const DenseToolbarHeight = 48;
+export const LeftDrawerWidth = 305;
 export const RightDrawerWidth = 320;
 
 interface Props {
-  readonly children: React.ReactNode;
-  readonly header: React.ReactNode;
-  readonly leftDrawer: React.ReactNode;
+  readonly bottomDrawer?: React.ReactNode;
+  readonly bottomDrawerHeight?: number;
+  readonly children?: React.ReactNode;
+  readonly header?: React.ReactNode;
+  readonly leftDrawer?: React.ReactNode;
+  readonly leftDrawerWidth?: number;
   readonly main: React.ReactNode;
-  readonly open: boolean;
-  readonly rightDrawer: React.ReactNode;
+  readonly rightDrawer?: React.ReactNode;
+  readonly rightDrawerWidth?: number;
 }
 
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    marginRight: RightDrawerWidth,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: `calc(100% - ${RightDrawerWidth}px)`,
-    [theme.breakpoints.down("sm")]: {
-      margin: 0,
-      width: `100%`,
-    },
-  },
-  appBarShift: {
-    marginLeft: LeftDrawerWidth,
-    marginRight: RightDrawerWidth,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    width: `calc(100% - ${LeftDrawerWidth + RightDrawerWidth}px)`,
-    zIndex: theme.zIndex.drawer + 1,
-    [theme.breakpoints.down("sm")]: {
-      margin: 0,
-      width: `100%`,
-    },
-  },
-  content: {
-    height: `calc(100% - ${DenseToolbarHeight}px)`,
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: `calc(100% - ${RightDrawerWidth}px)`,
-    [theme.breakpoints.down("sm")]: {
-      width: `100%`,
-    },
-  },
-  contentShift: {
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    width: `calc(100% - ${LeftDrawerWidth + RightDrawerWidth}px)`,
-    [theme.breakpoints.down("sm")]: {
-      width: `100%`,
-    },
-  },
-}));
+interface DrawerProps {
+  leftDrawerWidth: number;
+  rightDrawerWidth: number;
+}
+
+function shouldForwardProp(prop: PropertyKey): boolean {
+  return (
+    prop !== "bottomDrawerHeight" &&
+    prop !== "leftDrawerWidth" &&
+    prop !== "rightDrawerWidth" &&
+    prop !== "toolbarHeight"
+  );
+}
+
+const AppBar = styled(MuiAppBar, { shouldForwardProp })<DrawerProps>(
+  ({ leftDrawerWidth, rightDrawerWidth, theme }) => {
+    const { create } = theme.transitions;
+    return {
+      marginLeft: leftDrawerWidth,
+      transition: create(["margin", "width"], sharpLeaving(theme)),
+      zIndex: theme.zIndex.drawer + 1,
+      ...(rightDrawerWidth > 0 && {
+        marginRight: rightDrawerWidth,
+        transition: create(["margin", "width"], easeOutEntering(theme)),
+        width: `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
+      }),
+      [theme.breakpoints.down("sm")]: {
+        margin: 0,
+        width: `100%`,
+      },
+    };
+  }
+);
+
+const Main = styled("main", { shouldForwardProp })<
+  DrawerProps & { bottomDrawerHeight: number; toolbarHeight: number }
+>(
+  ({
+    bottomDrawerHeight,
+    leftDrawerWidth,
+    rightDrawerWidth,
+    theme,
+    toolbarHeight,
+  }) => {
+    const { create } = theme.transitions;
+    return {
+      flexGrow: 1,
+      height: `calc(100% - ${bottomDrawerHeight + toolbarHeight}px)`,
+      marginRight: -RightDrawerWidth,
+      marginTop: `${toolbarHeight}px`,
+      maxWidth: `calc(100% - ${leftDrawerWidth}px)`,
+      transition: create("margin", sharpLeaving(theme)),
+      ...(rightDrawerWidth > 0 && {
+        marginRight: 0,
+        transition: create("margin", easeOutEntering(theme)),
+      }),
+      [theme.breakpoints.down("sm")]: { width: `100%` },
+      ...(rightDrawerWidth > 0 && {
+        width: `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
+      }),
+    };
+  }
+);
 
 export function Layout({
+  bottomDrawer,
+  bottomDrawerHeight = 0,
   children,
   header,
   leftDrawer,
+  leftDrawerWidth = 0,
   main,
-  open,
   rightDrawer,
+  rightDrawerWidth = 0,
 }: Props): JSX.Element {
-  const { appBar, appBarShift, content, contentShift } = useStyles();
-
   return (
-    <Box height="100vh" display="flex">
-      <AppBar
-        position="fixed"
-        elevation={1}
-        color="default"
-        className={clsx(appBar, {
-          [appBarShift]: open,
-        })}
+    <Box sx={{ display: "flex", height: "100vh" }}>
+      {header && (
+        <AppBar
+          color="default"
+          elevation={1}
+          leftDrawerWidth={leftDrawerWidth}
+          position="fixed"
+          rightDrawerWidth={rightDrawerWidth}
+        >
+          <Toolbar variant="dense">{header}</Toolbar>
+        </AppBar>
+      )}
+      {leftDrawer ? leftDrawer : <></>}
+      <Main
+        bottomDrawerHeight={bottomDrawerHeight}
+        leftDrawerWidth={leftDrawerWidth}
+        rightDrawerWidth={rightDrawerWidth}
+        toolbarHeight={header ? DenseToolbarHeight : 0}
       >
-        <Toolbar variant="dense">{header}</Toolbar>
-      </AppBar>
-      <Hidden smDown>{leftDrawer}</Hidden>
-      <main className={clsx(content, { [contentShift]: open })}>
-        <Box minHeight={`${DenseToolbarHeight}px`} />
         {main}
-      </main>
-      <Hidden smDown>{rightDrawer}</Hidden>
-      {children}
+      </Main>
+      {rightDrawer ? rightDrawer : <></>}
+      {children ?? <></>}
+      {bottomDrawer ? bottomDrawer : <></>}
     </Box>
   );
 }

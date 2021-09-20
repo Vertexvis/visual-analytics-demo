@@ -1,8 +1,7 @@
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import Drawer from "@material-ui/core/Drawer";
-import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Drawer, { drawerClasses } from "@mui/material/Drawer";
+import Typography from "@mui/material/Typography";
 import React from "react";
 
 import { AnalyticsData } from "../lib/analytics";
@@ -18,15 +17,6 @@ interface Props {
   sampleDataPath?: string;
 }
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    width: RightDrawerWidth,
-  },
-  title: {
-    textTransform: "uppercase",
-  },
-}));
-
 export function RightDrawer({
   analyticsData,
   dataSelected,
@@ -35,13 +25,19 @@ export function RightDrawer({
   onReset,
   sampleDataPath,
 }: Props): JSX.Element {
-  const { paper, title } = useStyles();
-
   return (
-    <Drawer anchor="right" variant="permanent" classes={{ paper }}>
+    <Drawer
+      anchor="right"
+      sx={{
+        display: { sm: "block", xs: "none" },
+        width: RightDrawerWidth,
+        [`& .${drawerClasses.paper}`]: { width: RightDrawerWidth },
+      }}
+      variant="permanent"
+    >
       <Accordion expanded>
         <AccordionSummary>
-          <Typography className={title} variant="body2">
+          <Typography sx={{ textTransform: "uppercase" }} variant="body2">
             Analytics
           </Typography>
         </AccordionSummary>

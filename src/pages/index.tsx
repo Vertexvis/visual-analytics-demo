@@ -1,11 +1,16 @@
-import Box from "@material-ui/core/Box";
+import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
 import React from "react";
 import { useDropzone } from "react-dropzone";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { CsvData, CsvDataType } from "../components/Analytics";
 import { Header } from "../components/Header";
-import { Layout } from "../components/Layout";
+import {
+  Layout,
+  LeftDrawerWidth,
+  RightDrawerWidth,
+} from "../components/Layout";
 import { LeftDrawer } from "../components/LeftDrawer";
 import { encodeCreds, OpenDialog } from "../components/OpenScene";
 import { RightDrawer } from "../components/RightDrawer";
@@ -23,7 +28,6 @@ import {
   StreamCredentials,
 } from "../lib/env";
 import { handleCsvUpload, parseCsv } from "../lib/files";
-import { useKeyListener } from "../lib/key-listener";
 import {
   applyAnalyticsData,
   applyOrClearBySuppliedId,
@@ -63,10 +67,7 @@ export default function Home(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [credentials]);
 
-  const keys = useKeyListener();
-  React.useEffect(() => {
-    if (!dialogOpen && keys.o) setDialogOpen(true);
-  }, [dialogOpen, keys]);
+  useHotkeys("o", () => setDialogOpen(true), { keyup: true });
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: React.useCallback(
@@ -126,6 +127,7 @@ export default function Home(): JSX.Element {
           viewerId={ViewerId}
         />
       }
+      leftDrawerWidth={drawerOpen ? LeftDrawerWidth : 0}
       main={
         viewer.isReady && (
           <Box height="100%" width="100%" {...getRootProps()}>
@@ -142,7 +144,6 @@ export default function Home(): JSX.Element {
           </Box>
         )
       }
-      open={drawerOpen}
       rightDrawer={
         <RightDrawer
           analyticsData={analyticsData}
@@ -166,6 +167,7 @@ export default function Home(): JSX.Element {
           }
         />
       }
+      rightDrawerWidth={RightDrawerWidth}
     >
       {dialogOpen && (
         <OpenDialog

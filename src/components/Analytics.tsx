@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 import React from "react";
 
 // @ts-ignore
@@ -51,16 +50,6 @@ interface Props {
   sampleDataPath?: string;
 }
 
-const useStyles = makeStyles(() => ({
-  hm: {
-    background: `linear-gradient(180deg, rgba(0,255,0,1) 0%, rgba(255,255,0,1) 50%, rgba(255,0,0,1) 100%)`,
-    borderRadius: `0.375rem`,
-    display: "grid",
-    gridTemplateColumns: `repeat(1, minmax(0, 1fr))`,
-    placeContent: `space-between`,
-  },
-}));
-
 export function Analytics({
   analyticsData,
   dataSelected,
@@ -70,13 +59,11 @@ export function Analytics({
   sampleDataPath,
 }: Props): JSX.Element {
   const mid = (analyticsData.max - analyticsData.min) / 2;
-  const { hm } = useStyles();
-
   return (
     <Box mx={2} mb={2}>
       {sampleDataPath && (
         <Box mb={2}>
-          <Typography variant="body2" style={{ marginBottom: 10 }}>
+          <Typography variant="body2" sx={{ mb: 1 }}>
             The Vertex Visual Analytics demo shows how to connect external data
             sources to your 3D digital twin, delivering powerful insights with
             ease. Select sample datasets below or{" "}
@@ -85,7 +72,7 @@ export function Analytics({
             </Link>{" "}
             to modify them yourself.
           </Typography>
-          <Typography variant="body2" style={{ marginBottom: 10 }}>
+          <Typography variant="body2" sx={{ mb: 1 }}>
             After modification, simply drag and drop the CSV files onto the
             model and watch as your view updates to reflect the values found in
             the data.
@@ -111,7 +98,18 @@ export function Analytics({
         </Box>
       )}
       {analyticsData.isHeatMap && (
-        <Box className={hm} height={"10rem"} mb={2} textAlign="center">
+        <Box
+          sx={{
+            background: `linear-gradient(180deg, rgba(0,255,0,1) 0%, rgba(255,255,0,1) 50%, rgba(255,0,0,1) 100%)`,
+            borderRadius: `0.375rem`,
+            display: "grid",
+            gridTemplateColumns: `repeat(1, minmax(0, 1fr))`,
+            height: "10rem",
+            mb: 2,
+            placeContent: `space-between`,
+            textAlign: "center",
+          }}
+        >
           <Typography variant="body2">{analyticsData.min}</Typography>
           <Typography variant="body2">
             {mid.toFixed(mid % 1 === 0 ? 0 : 2)}
@@ -144,10 +142,12 @@ export function Analytics({
                     <TableCell>{k}</TableCell>
                     <TableCell>
                       <Box
-                        borderRadius={2}
-                        height={"1rem"}
-                        style={{ backgroundColor: v.color }}
-                        width={"1rem"}
+                        sx={{
+                          backgroundColor: v.color,
+                          borderRadius: 2,
+                          height: "1rem",
+                          width: "1rem",
+                        }}
                       ></Box>
                     </TableCell>
                     <TableCell>{v.count}</TableCell>

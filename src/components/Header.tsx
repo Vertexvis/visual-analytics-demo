@@ -1,10 +1,8 @@
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import Link from "@material-ui/core/Link";
-import { makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import clsx from "clsx";
+import MenuIcon from "@mui/icons-material/Menu";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
 import React from "react";
 
 interface Props {
@@ -13,31 +11,26 @@ interface Props {
   open: boolean;
 }
 
-const useStyles = makeStyles((theme) => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  hide: {
-    display: "none",
-  },
-}));
-
 export function Header({
   onMenuClick,
   onOpenSceneClick,
   open,
 }: Props): JSX.Element {
-  const { menuButton, hide } = useStyles();
-
   return (
-    <Box display="flex" justifyContent="space-between" width="100%">
-      <div>
+    <Box
+      sx={{
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%",
+      }}
+    >
+      <Box sx={{ alignItems: "center", display: "flex" }}>
         <IconButton
           color="inherit"
-          aria-label="open drawer"
           onClick={onMenuClick}
           edge="start"
-          className={clsx(menuButton, open && hide)}
+          sx={{ display: open ? "none" : "block", mr: 2 }}
         >
           <MenuIcon />
         </IconButton>
@@ -48,11 +41,11 @@ export function Header({
         >
           Open Scene
         </Button>
-      </div>
+      </Box>
       <Link
         href="https://github.com/Vertexvis/visual-analytics-demo"
         rel="noreferrer"
-        style={{ alignSelf: "center" }}
+        sx={{ alignSelf: "center" }}
         target="_blank"
       >
         View on GitHub
