@@ -1,4 +1,4 @@
-import { defineCustomElements } from "@vertexvis/viewer-react";
+import { defineCustomElements } from "@vertexvis/viewer/loader";
 import React from "react";
 
 interface Viewer {

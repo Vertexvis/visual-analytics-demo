@@ -1,6 +1,7 @@
 /* @jsx jsx */ /** @jsxRuntime classic */ import { jsx } from "@emotion/react";
 import { vertexvis } from "@vertexvis/frame-streaming-protos";
-import { JSX as ViewerJSX, VertexViewer } from "@vertexvis/viewer-react";
+import { JSX as ViewerJSX } from "@vertexvis/viewer";
+import { VertexViewer } from "@vertexvis/viewer-react";
 import React from "react";
 
 import { StreamCredentials } from "../lib/env";
