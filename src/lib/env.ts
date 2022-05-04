@@ -8,7 +8,7 @@ export interface StreamCredentials {
 // Super Car
 export const DefaultCredentials: StreamCredentials = {
   clientId: "08F675C4AACE8C0214362DB5EFD4FACAFA556D463ECA00877CB225157EF58BFA",
-  streamKey: "wx8Gz7-zH2aIGruA1tSBwyApPvfy9yrmpFKN",
+  streamKey: "B3b9g0724IPXJf-1yBrJxWI4JSwin9sNiIkY",
 };
 
 export const Env =
@@ -16,7 +16,7 @@ export const Env =
 
 export const SampleDataPaths: { [k: string]: string } = {
   [DefaultCredentials.streamKey]: "/super-car-data.zip",
-  Eh96kzXEppNfcxj5gbbqdJ9oUdQPB7hXzHrU: "/vertex-valve-data.zip",
+  "vpe5dKpDffDT8bLzhbP0S7Da2nN9-w-xgq6X": "/vertex-valve-data.zip",
 };
 
 export function head<T>(items?: T | T[]): T | undefined {
