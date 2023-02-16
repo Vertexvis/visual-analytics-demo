@@ -1,9 +1,8 @@
-import { arrayChunked } from "@vertexvis/api-client-node";
-import { vertexvis } from "@vertexvis/frame-streaming-protos";
-import { ColorMaterial } from "@vertexvis/viewer";
+import { arrayChunked } from '@vertexvis/api-client-node';
+import { vertexvis } from '@vertexvis/frame-streaming-protos';
+import { ColorMaterial } from '@vertexvis/viewer';
 
-import { AnalyticsData } from "./analytics";
-import { SelectColor } from "./colors";
+import { AnalyticsData } from './analytics';
 
 const ChunkSize = 200;
 
@@ -80,12 +79,12 @@ export async function selectByHit({
   const id = hit?.itemId?.hex;
   const suppliedId = hit?.itemSuppliedId?.value;
   if (id) {
-    console.debug(`Selected ${id}${suppliedId ? `, ${suppliedId}` : ""}`);
+    console.debug(`Selected ${id}${suppliedId ? `, ${suppliedId}` : ''}`);
 
     await scene
       .items((op) => [
         op.where((q) => q.all()).deselect(),
-        op.where((q) => q.withItemId(id)).select(SelectColor),
+        op.where((q) => q.withItemId(id)).select(),
       ])
       .execute();
   } else {
