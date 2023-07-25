@@ -32,7 +32,7 @@ function UnwrappedViewer({
       css={{ height: "100%", width: "100%" }}
       id={viewerId}
       ref={viewer}
-      src={`urn:vertexvis:stream-key:${credentials.streamKey}`}
+      src={`urn:vertex:stream-key:${credentials.streamKey}`}
       {...props}
     />
   );
