@@ -8,7 +8,7 @@ export interface StreamCredentials {
 // Super Car
 export const DefaultCredentials: StreamCredentials = {
   clientId: "08F675C4AACE8C0214362DB5EFD4FACAFA556D463ECA00877CB225157EF58BFA",
-  streamKey: "xwa3EgD3xfeETw164U9XmxopKZ0c8n1gt93j",
+  streamKey: "cSX9o7XXyn369J2jypUlkA4rYbrlnqjEj4m3",
 };
 
 export const Env =
